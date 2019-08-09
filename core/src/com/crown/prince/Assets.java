@@ -21,6 +21,7 @@ public class Assets {
 
     public Assets(){
         manager = new AssetManager();
+        setAssets();
     }
 
     public void setAssets(){

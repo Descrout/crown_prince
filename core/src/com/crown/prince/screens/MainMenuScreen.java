@@ -1,6 +1,14 @@
 package com.crown.prince.screens;
 
+import com.crown.prince.Main;
+
 public class MainMenuScreen implements com.badlogic.gdx.Screen {
+    private Main game;
+
+    public MainMenuScreen(Main game){
+        this.game = game;
+    }
+
     @Override
     public void show() {
 

@@ -8,23 +8,36 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.crown.prince.screens.Screen;
+import com.crown.prince.screens.ScreenManager;
 
 public class Main extends Game {
 	public SpriteBatch batch;
-	public ShapeRenderer shapeRenderer;
-	public OrthographicCamera camera;
-	public Viewport viewport;
+	private ShapeRenderer shapeRenderer;
+
+	public OrthographicCamera cam;
+	private Viewport viewport;
+
+	public Assets assets;
 
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 
-		camera = new OrthographicCamera();
-		viewport = new FitViewport(Constants.ScreenW, Constants.ScreenH, camera);
+		cam = new OrthographicCamera();
+
+		viewport = new FitViewport(Constants.ScreenW, Constants.ScreenH, cam);
 		viewport.apply();
-		camera.position.set(Constants.ScreenW / 2f , Constants.ScreenH / 2f, 0);
-		camera.update();
+
+		cam.position.set(Constants.ScreenW / 2f , Constants.ScreenH / 2f, 0);
+		cam.update();
+
+		assets = new Assets();
+		assets.loadAllAtOnce();
+
+		ScreenManager.getInstance().initialize(this);
+		ScreenManager.getInstance().show(Screen.GAME);
 	}
 
 	@Override
@@ -32,16 +45,7 @@ public class Main extends Game {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		batch.setProjectionMatrix(camera.combined);
-		shapeRenderer.setProjectionMatrix(camera.combined);
-
-		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-		batch.begin();
-
 		super.render();
-
-		batch.end();
-		shapeRenderer.end();
 	}
 
 	@Override

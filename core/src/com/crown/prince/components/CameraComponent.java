@@ -7,4 +7,5 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 public class CameraComponent implements Component {
     public Entity target;
     public OrthographicCamera camera;
+    public float lerp = 0f;
 }

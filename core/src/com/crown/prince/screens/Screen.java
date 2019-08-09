@@ -1,29 +1,31 @@
 package com.crown.prince.screens;
 
 
+import com.crown.prince.Main;
+
 public enum Screen {
 
     INTRO {
         @Override
-        protected com.badlogic.gdx.Screen getScreenInstance() {
-            return new IntroScreen();
+        protected com.badlogic.gdx.Screen getScreenInstance(Main game) {
+            return new IntroScreen(game);
         }
     },
 
     MAIN_MENU {
         @Override
-        protected com.badlogic.gdx.Screen getScreenInstance() {
-            return new MainMenuScreen();
+        protected com.badlogic.gdx.Screen getScreenInstance(Main game) {
+            return new MainMenuScreen(game);
         }
     },
 
     GAME {
         @Override
-        protected com.badlogic.gdx.Screen getScreenInstance() {
-            return new GameScreen();
+        protected com.badlogic.gdx.Screen getScreenInstance(Main game) {
+            return new GameScreen(game);
         }
     };
 
-    protected abstract com.badlogic.gdx.Screen getScreenInstance();
+    protected abstract com.badlogic.gdx.Screen getScreenInstance(Main game);
 
 }

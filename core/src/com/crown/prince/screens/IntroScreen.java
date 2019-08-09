@@ -1,6 +1,14 @@
 package com.crown.prince.screens;
 
+import com.crown.prince.Main;
+
 public class IntroScreen implements com.badlogic.gdx.Screen {
+    private Main game;
+
+    public IntroScreen(Main game){
+        this.game = game;
+    }
+
     @Override
     public void show() {
 
