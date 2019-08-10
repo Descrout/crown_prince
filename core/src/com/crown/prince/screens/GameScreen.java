@@ -5,6 +5,7 @@ import com.crown.prince.Main;
 import com.crown.prince.World;
 import com.crown.prince.systems.AnimationSystem;
 import com.crown.prince.systems.CameraSystem;
+import com.crown.prince.systems.PhysicsSystem;
 import com.crown.prince.systems.RenderSystem;
 
 public class GameScreen implements com.badlogic.gdx.Screen {
@@ -22,6 +23,7 @@ public class GameScreen implements com.badlogic.gdx.Screen {
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new CameraSystem());
         engine.addSystem(new RenderSystem(game.batch,game.cam));
+        engine.addSystem(new PhysicsSystem());
 
         world.create();
     }

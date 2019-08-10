@@ -41,6 +41,7 @@ public class World {
         TextureComponent texture = engine.createComponent(TextureComponent.class);
         AnimationComponent animation = engine.createComponent(AnimationComponent.class);
         PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
+        PhysicsComponent physics = engine.createComponent(PhysicsComponent.class);
 
         animation.animations.put(PlayerComponent.RUN, assets.adventurerRun);
         animation.animations.put(PlayerComponent.IDLE, assets.adventurerIdling);
@@ -48,13 +49,14 @@ public class World {
         animation.animations.put(PlayerComponent.FALL, assets.adventurerFall);
         animation.state = PlayerComponent.IDLE;
 
-        position.x = x;
-        position.y = y;
+        position.x = physics.oldX = x;
+        position.y = physics.oldY = y;
 
         entity.add(position);
         entity.add(texture);
         entity.add(animation);
         entity.add(playerComponent);
+        entity.add(physics);
 
         engine.addEntity(entity);
 
