@@ -2,8 +2,12 @@ package com.crown.prince;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.utils.XmlReader;
 import com.crown.prince.components.*;
+import com.crown.prince.systems.RenderSystem;
 
 public class World {
 
@@ -11,15 +15,26 @@ public class World {
     private OrthographicCamera cam;
     private Assets assets;
 
+    private MapLoader mapLoader;
+    private TileMap map;
+
+
+    public static int width = 0;
+    public static int height = 0;
+
     public World(PooledEngine engine, OrthographicCamera cam, Assets assets){
         this.engine = engine;
         this.cam = cam;
         this.assets = assets;
+        mapLoader = new MapLoader();
     }
 
     public void create(){
         Entity player = createPlayer(100f,100f);
+
         createCamera(player);
+
+        loadMap("test");
     }
 
     private void createCamera(Entity target) {
@@ -61,5 +76,25 @@ public class World {
         engine.addEntity(entity);
 
         return entity;
+    }
+
+
+
+    public void loadMap(String name){
+        map = new TileMap(assets.tiles);
+
+        mapLoader.load(name, map);
+
+        engine.getSystem(RenderSystem.class).setTileMap(map);
+
+
+        Entity entity = engine.createEntity();
+
+        CollisionGridComponent collGrid = engine.createComponent(CollisionGridComponent.class);
+        collGrid.grid = mapLoader.createCollisionGrid("collision");
+
+        entity.add(collGrid);
+
+        engine.addEntity(entity);
     }
 }

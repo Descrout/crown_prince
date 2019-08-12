@@ -8,14 +8,22 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.crown.prince.Mappers;
+import com.crown.prince.TileMap;
 import com.crown.prince.components.PositionComponent;
 import com.crown.prince.components.TextureComponent;
+
+import static com.crown.prince.Constants.TILE_SIZE;
+
 
 public class RenderSystem extends EntitySystem {
 
     private SpriteBatch batch;
     private OrthographicCamera cam;
     private ImmutableArray<Entity> entities;
+
+
+    private TileMap map;
+    private int startX, startY;
 
     public RenderSystem(SpriteBatch batch, OrthographicCamera cam){
         this.batch = batch;
@@ -28,9 +36,13 @@ public class RenderSystem extends EntitySystem {
 
     @Override
     public void update(float deltaTime){
-        batch.setProjectionMatrix(cam.combined);
+        startX = Math.round(cam.position.x - cam.viewportWidth/2) / TILE_SIZE;
+        startY = Math.round(cam.position.y - cam.viewportHeight/2) / TILE_SIZE;
 
+        batch.setProjectionMatrix(cam.combined);
         batch.begin();
+
+        renderBack();
 
         for (int i = 0; i < entities.size(); ++i) {
             Entity entity = entities.get(i);
@@ -42,7 +54,52 @@ public class RenderSystem extends EntitySystem {
             batch.draw(tex.region,pos.x,pos.y);
         }
 
+        renderFront();
+
         batch.end();
+    }
+
+    private void renderBack(){
+
+        for(int j = startY; j<=startY+cam.viewportHeight/ TILE_SIZE; j++){
+            if(j>=map.tileNumY)break;
+            if(j<0)continue;
+            for(int i = startX; i<=startX+cam.viewportWidth/ TILE_SIZE; i++){
+                if(i>=map.tileNumX) break;
+                if(i<0) continue;
+
+                if(map.backgrounTiles[i][j]!=-1) {
+                    map.tileset.setRegion(map.offsetX + (map.backgrounTiles[i][j] % map.tileNum) * TILE_SIZE, map.offsetY + (int) Math.floor(map.backgrounTiles[i][j] / map.tileNum) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    batch.draw(map.tileset, i * TILE_SIZE, j * TILE_SIZE);
+                }
+
+                if(map.mainTiles[i][j]!=-1) {
+                    map.tileset.setRegion(map.offsetX + (map.mainTiles[i][j] % map.tileNum) * TILE_SIZE, map.offsetY + (int) Math.floor(map.mainTiles[i][j] / map.tileNum) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    batch.draw(map.tileset, i * TILE_SIZE, j * TILE_SIZE);
+                }
+            }
+        }
+    }
+
+    private void renderFront(){
+        for(int j = startY; j<=startY+cam.viewportHeight/ TILE_SIZE; j++){
+            if(j>=map.tileNumY)break;
+            if(j<0)continue;
+            for(int i = startX; i<=startX+cam.viewportWidth/ TILE_SIZE; i++){
+                if(i>=map.tileNumX) break;
+                if(i<0) continue;
+
+                if(map.foregroundTiles[i][j]!=-1) {
+                    map.tileset.setRegion(map.offsetX + (map.foregroundTiles[i][j] % map.tileNum) * TILE_SIZE, map.offsetY + (int) Math.floor(map.foregroundTiles[i][j] / map.tileNum) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    batch.draw(map.tileset, i * TILE_SIZE, j * TILE_SIZE);
+                }
+
+            }
+        }
+    }
+
+    public void setTileMap(TileMap map){
+        this.map = map;
     }
 
 }

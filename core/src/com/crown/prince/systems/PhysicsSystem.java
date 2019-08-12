@@ -9,9 +9,11 @@ import com.crown.prince.components.PositionComponent;
 
 public class PhysicsSystem extends IntervalIteratingSystem {
     public static final float Fixed_Timestep = 1/50f;
+
     public PhysicsSystem(){
         super(Family.all(PositionComponent.class, PhysicsComponent.class).get(),Fixed_Timestep);
     }
+
     @Override
     protected void processEntity(Entity entity) {
 
@@ -21,13 +23,19 @@ public class PhysicsSystem extends IntervalIteratingSystem {
         physics.oldX = pos.x;
         physics.oldY = pos.y;
 
-        physics.accY += physics.gravity;
+        physics.accY -= physics.gravity;
 
         physics.velX *= physics.friction;
+
         physics.velX += physics.accX;
         physics.velY += physics.accY;
+
+        if(physics.velY > physics.maxVelY) physics.velY = physics.maxVelY;
+        if(physics.velY < -physics.maxVelY) physics.velY = -physics.maxVelY;
+
         pos.x += physics.velX * Fixed_Timestep;
         pos.y += physics.velY * Fixed_Timestep;
+
         physics.accX = 0;
         physics.accY = 0;
     }
