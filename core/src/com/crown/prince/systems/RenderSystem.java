@@ -25,19 +25,19 @@ public class RenderSystem extends EntitySystem {
     private TileMap map;
     private int startX, startY;
 
-    public RenderSystem(SpriteBatch batch, OrthographicCamera cam){
+    public RenderSystem(SpriteBatch batch, OrthographicCamera cam) {
         this.batch = batch;
         this.cam = cam;
     }
 
-    public void addedToEngine(Engine engine){
+    public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(PositionComponent.class, TextureComponent.class).get());
     }
 
     @Override
-    public void update(float deltaTime){
-        startX = Math.round(cam.position.x - cam.viewportWidth/2) / TILE_SIZE;
-        startY = Math.round(cam.position.y - cam.viewportHeight/2) / TILE_SIZE;
+    public void update(float deltaTime) {
+        startX = Math.round(cam.position.x - cam.viewportWidth / 2) / TILE_SIZE;
+        startY = Math.round(cam.position.y - cam.viewportHeight / 2) / TILE_SIZE;
 
         batch.setProjectionMatrix(cam.combined);
         batch.begin();
@@ -48,10 +48,10 @@ public class RenderSystem extends EntitySystem {
             Entity entity = entities.get(i);
 
             TextureComponent tex = Mappers.texture.get(entity);
-            if(tex.region == null) continue;
+            if (tex.region == null) continue;
             PositionComponent pos = Mappers.position.get(entity);
 
-            batch.draw(tex.region,pos.x,pos.y);
+            batch.draw(tex.region, pos.x, pos.y);
         }
 
         renderFront();
@@ -59,21 +59,19 @@ public class RenderSystem extends EntitySystem {
         batch.end();
     }
 
-    private void renderBack(){
-
-        for(int j = startY; j<=startY+cam.viewportHeight/ TILE_SIZE; j++){
-            if(j>=map.tileNumY)break;
-            if(j<0)continue;
-            for(int i = startX; i<=startX+cam.viewportWidth/ TILE_SIZE; i++){
-                if(i>=map.tileNumX) break;
-                if(i<0) continue;
-
-                if(map.backgrounTiles[i][j]!=-1) {
+    private void renderBack() {
+        for (int i = startX; i <= startX + cam.viewportWidth / TILE_SIZE; i++) {
+            if (i >= map.tileNumX) break;
+            if (i < 0) continue;
+            for (int j = startY; j <= startY + cam.viewportHeight / TILE_SIZE; j++) {
+                if (j >= map.tileNumY) break;
+                if (j < 0) continue;
+                if (map.backgrounTiles[i][j] != -1) {
                     map.tileset.setRegion(map.offsetX + (map.backgrounTiles[i][j] % map.tileNum) * TILE_SIZE, map.offsetY + (int) Math.floor(map.backgrounTiles[i][j] / map.tileNum) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                     batch.draw(map.tileset, i * TILE_SIZE, j * TILE_SIZE);
                 }
 
-                if(map.mainTiles[i][j]!=-1) {
+                if (map.mainTiles[i][j] != -1) {
                     map.tileset.setRegion(map.offsetX + (map.mainTiles[i][j] % map.tileNum) * TILE_SIZE, map.offsetY + (int) Math.floor(map.mainTiles[i][j] / map.tileNum) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                     batch.draw(map.tileset, i * TILE_SIZE, j * TILE_SIZE);
                 }
@@ -81,15 +79,14 @@ public class RenderSystem extends EntitySystem {
         }
     }
 
-    private void renderFront(){
-        for(int j = startY; j<=startY+cam.viewportHeight/ TILE_SIZE; j++){
-            if(j>=map.tileNumY)break;
-            if(j<0)continue;
-            for(int i = startX; i<=startX+cam.viewportWidth/ TILE_SIZE; i++){
-                if(i>=map.tileNumX) break;
-                if(i<0) continue;
-
-                if(map.foregroundTiles[i][j]!=-1) {
+    private void renderFront() {
+        for (int i = startX; i <= startX + cam.viewportWidth / TILE_SIZE; i++) {
+            if (i >= map.tileNumX) break;
+            if (i < 0) continue;
+            for (int j = startY; j <= startY + cam.viewportHeight / TILE_SIZE; j++) {
+                if (j >= map.tileNumY) break;
+                if (j < 0) continue;
+                if (map.foregroundTiles[i][j] != -1) {
                     map.tileset.setRegion(map.offsetX + (map.foregroundTiles[i][j] % map.tileNum) * TILE_SIZE, map.offsetY + (int) Math.floor(map.foregroundTiles[i][j] / map.tileNum) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
                     batch.draw(map.tileset, i * TILE_SIZE, j * TILE_SIZE);
                 }
@@ -98,7 +95,7 @@ public class RenderSystem extends EntitySystem {
         }
     }
 
-    public void setTileMap(TileMap map){
+    public void setTileMap(TileMap map) {
         this.map = map;
     }
 
