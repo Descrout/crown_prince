@@ -3,10 +3,7 @@ package com.crown.prince.screens;
 import com.badlogic.ashley.core.PooledEngine;
 import com.crown.prince.Main;
 import com.crown.prince.World;
-import com.crown.prince.systems.AnimationSystem;
-import com.crown.prince.systems.CameraSystem;
-import com.crown.prince.systems.PhysicsSystem;
-import com.crown.prince.systems.RenderSystem;
+import com.crown.prince.systems.*;
 
 public class GameScreen implements com.badlogic.gdx.Screen {
     private Main game;
@@ -24,6 +21,7 @@ public class GameScreen implements com.badlogic.gdx.Screen {
         engine.addSystem(new CameraSystem());
         engine.addSystem(new RenderSystem(game.batch,game.cam));
         engine.addSystem(new PhysicsSystem());
+        engine.addSystem(new CollisionSystem());
 
         world.create();
     }

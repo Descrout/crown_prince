@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.crown.prince.Mappers;
 import com.crown.prince.TileMap;
+import com.crown.prince.World;
 import com.crown.prince.components.PositionComponent;
 import com.crown.prince.components.TextureComponent;
 
@@ -60,11 +61,11 @@ public class RenderSystem extends EntitySystem {
     }
 
     private void renderBack() {
-        for (int i = startX; i <= startX + cam.viewportWidth / TILE_SIZE; i++) {
-            if (i >= map.tileNumX) break;
+       for (int i = startX; i <= startX + cam.viewportWidth / TILE_SIZE; i++) {
+            if (i >= World.tileNumX) break;
             if (i < 0) continue;
             for (int j = startY; j <= startY + cam.viewportHeight / TILE_SIZE; j++) {
-                if (j >= map.tileNumY) break;
+                if (j >= World.tileNumY) break;
                 if (j < 0) continue;
                 if (map.backgrounTiles[i][j] != -1) {
                     map.tileset.setRegion(map.offsetX + (map.backgrounTiles[i][j] % map.tileNum) * TILE_SIZE, map.offsetY + (int) Math.floor(map.backgrounTiles[i][j] / map.tileNum) * TILE_SIZE, TILE_SIZE, TILE_SIZE);
@@ -81,10 +82,10 @@ public class RenderSystem extends EntitySystem {
 
     private void renderFront() {
         for (int i = startX; i <= startX + cam.viewportWidth / TILE_SIZE; i++) {
-            if (i >= map.tileNumX) break;
+            if (i >= World.tileNumX) break;
             if (i < 0) continue;
             for (int j = startY; j <= startY + cam.viewportHeight / TILE_SIZE; j++) {
-                if (j >= map.tileNumY) break;
+                if (j >= World.tileNumY) break;
                 if (j < 0) continue;
                 if (map.foregroundTiles[i][j] != -1) {
                     map.tileset.setRegion(map.offsetX + (map.foregroundTiles[i][j] % map.tileNum) * TILE_SIZE, map.offsetY + (int) Math.floor(map.foregroundTiles[i][j] / map.tileNum) * TILE_SIZE, TILE_SIZE, TILE_SIZE);

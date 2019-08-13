@@ -4,9 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.XmlReader;
 
+import static com.crown.prince.World.tileNumX;
+import static com.crown.prince.World.tileNumY;
+
 public class MapLoader {
-    public int tileNumX;
-    public int tileNumY;
     private XmlReader.Element root;
 
     public MapLoader() {
@@ -28,8 +29,6 @@ public class MapLoader {
         map.mainTiles = createLayer("tiles");
         map.foregroundTiles = createLayer("foreground");
 
-        map.tileNumX = tileNumX;
-        map.tileNumY = tileNumY;
     }
 
     public int[][] createLayer(String layerName) {

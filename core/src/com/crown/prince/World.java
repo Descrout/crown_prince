@@ -2,11 +2,9 @@ package com.crown.prince;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.utils.XmlReader;
 import com.crown.prince.components.*;
+import com.crown.prince.systems.CollisionSystem;
 import com.crown.prince.systems.RenderSystem;
 
 public class World {
@@ -21,6 +19,9 @@ public class World {
 
     public static int width = 0;
     public static int height = 0;
+
+    public static int tileNumX = 0;
+    public static int tileNumY = 0;
 
     public World(PooledEngine engine, OrthographicCamera cam, Assets assets){
         this.engine = engine;
@@ -57,6 +58,12 @@ public class World {
         AnimationComponent animation = engine.createComponent(AnimationComponent.class);
         PlayerComponent playerComponent = engine.createComponent(PlayerComponent.class);
         PhysicsComponent physics = engine.createComponent(PhysicsComponent.class);
+        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
+        CollideComponent collide = engine.createComponent(CollideComponent.class);
+
+        bounds.setBounds(26,39);
+
+        collide.init(bounds.w, bounds.h);
 
         animation.animations.put(PlayerComponent.RUN, assets.adventurerRun);
         animation.animations.put(PlayerComponent.IDLE, assets.adventurerIdling);
@@ -72,6 +79,8 @@ public class World {
         entity.add(animation);
         entity.add(playerComponent);
         entity.add(physics);
+        entity.add(bounds);
+        entity.add(collide);
 
         engine.addEntity(entity);
 
@@ -86,15 +95,7 @@ public class World {
         mapLoader.load(name, map);
 
         engine.getSystem(RenderSystem.class).setTileMap(map);
+        engine.getSystem(CollisionSystem.class).grid = mapLoader.createCollisionGrid("collision");
 
-
-        Entity entity = engine.createEntity();
-
-        CollisionGridComponent collGrid = engine.createComponent(CollisionGridComponent.class);
-        collGrid.grid = mapLoader.createCollisionGrid("collision");
-
-        entity.add(collGrid);
-
-        engine.addEntity(entity);
     }
 }

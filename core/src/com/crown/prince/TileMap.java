@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class TileMap {
     public int offsetX, offsetY;
-    public int tileNumX, tileNumY;
     public int tileNum;
     public TextureRegion tileset = null;
 
