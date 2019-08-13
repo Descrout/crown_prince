@@ -80,7 +80,7 @@ public class PlayerSystem extends EntitySystem {
         playerComponent.canJump = Calculation.isTouching(collide.touching, Touch.FLOOR);
         keyRegister();
         brain.update();
-        System.out.println(physics.velY);
+
     }
 
     public void setPlayer(Entity player){

@@ -13,7 +13,7 @@ import com.crown.prince.screens.ScreenManager;
 
 public class Main extends Game {
 	public SpriteBatch batch;
-	private ShapeRenderer shapeRenderer;
+	public ShapeRenderer shapeRenderer;
 
 	public OrthographicCamera cam;
 	private Viewport viewport;
@@ -57,5 +57,6 @@ public class Main extends Game {
 	public void dispose () {
 		super.dispose();
 		batch.dispose();
+		shapeRenderer.dispose();
 	}
 }

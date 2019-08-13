@@ -63,7 +63,7 @@ public class World {
         BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
         CollideComponent collide = engine.createComponent(CollideComponent.class);
 
-        bounds.setBounds(26,39);
+        bounds.setBounds(200,200);
 
         collide.init(bounds.w, bounds.h);
 

@@ -5,7 +5,9 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.crown.prince.Constants;
 import com.crown.prince.Mappers;
+import com.crown.prince.World;
 import com.crown.prince.components.CameraComponent;
 import com.crown.prince.components.PositionComponent;
 
@@ -38,6 +40,10 @@ public class CameraSystem extends IteratingSystem {
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) cam.camera.translate(0,10);
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) cam.camera.translate(0,-10);*/
 
+        if(cam.camera.position.x< Constants.ScreenW/2) cam.camera.position.x = Constants.ScreenW/2;
+        if(cam.camera.position.y<Constants.ScreenH/2) cam.camera.position.y = Constants.ScreenH/2;
+        if(cam.camera.position.x> World.width/2) cam.camera.position.x = World.width/2;
+        if(cam.camera.position.y>World.height/2) cam.camera.position.y = World.height/2;
         cam.camera.update();
     }
 }

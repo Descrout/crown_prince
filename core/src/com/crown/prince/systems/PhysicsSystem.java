@@ -85,7 +85,7 @@ public class PhysicsSystem extends IntervalIteratingSystem {
         for (int i = 0; i < collide.wCount; i++) {
             tX = getTileNum(physics.oldX + (i * TILE_SIZE));
             collide.colTilesHori[i] = getTileAt(tX, tY);
-            if (getPosition(tX) > physics.oldX + bounds.w || getPosition(tX) + TILE_SIZE < pos.x) continue;
+            //if (getPosition(tX) > physics.oldX + bounds.w || getPosition(tX) + TILE_SIZE < pos.x) continue;
             if (collide.colTilesHori[i] == 1) {
                 if (physics.velY < 0) {
                     pos.y = pos.y - (pos.y % TILE_SIZE) + TILE_SIZE + 0.1f;
@@ -104,7 +104,7 @@ public class PhysicsSystem extends IntervalIteratingSystem {
             tY = getTileNum(physics.oldY + (i * TILE_SIZE));
             if (collDetectHori && tX == ttX && tY == ttY) continue; // Checking for overlaps with horizontal
             collide.colTilesVerti[i] = getTileAt(tX, tY);
-            if (getPosition(tY) > physics.oldY + bounds.h || getPosition(tY) + TILE_SIZE < pos.y) continue;
+            //if (getPosition(tY) > physics.oldY + bounds.h || getPosition(tY) + TILE_SIZE < pos.y) continue;
             if (collide.colTilesVerti[i] == 1) {
                 if (physics.velX > 0) {
                     pos.x = pos.x - ((pos.x + bounds.w) % TILE_SIZE) - 0.1f;
