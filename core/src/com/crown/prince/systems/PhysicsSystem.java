@@ -14,11 +14,11 @@ import com.crown.prince.components.PositionComponent;
 import static com.crown.prince.Constants.TILE_SIZE;
 
 public class PhysicsSystem extends IntervalIteratingSystem {
-    public static final float Fixed_Timestep = 1/50f;
+    public static final float Fixed_Timestep = 1 / 50f;
     public int[][] grid;
 
-    public PhysicsSystem(){
-        super(Family.all(PositionComponent.class, PhysicsComponent.class).get(),Fixed_Timestep);
+    public PhysicsSystem() {
+        super(Family.all(PositionComponent.class, PhysicsComponent.class).get(), Fixed_Timestep);
     }
 
     public int getPosition(int xy) {
@@ -26,7 +26,7 @@ public class PhysicsSystem extends IntervalIteratingSystem {
     }
 
     public int getTileNum(float xy) {
-        return (int)(xy / TILE_SIZE);
+        return (int) (xy / TILE_SIZE);
     }
 
     public int getTileAt(int x, int y) {
@@ -49,8 +49,8 @@ public class PhysicsSystem extends IntervalIteratingSystem {
         physics.velX += physics.accX;
         physics.velY += physics.accY;
 
-        if(physics.velY > physics.maxVelY) physics.velY = physics.maxVelY;
-        if(physics.velY < -physics.maxVelY) physics.velY = -physics.maxVelY;
+        if (physics.velY > physics.maxVelY) physics.velY = physics.maxVelY;
+        if (physics.velY < -physics.maxVelY) physics.velY = -physics.maxVelY;
 
         pos.x += physics.velX * Fixed_Timestep;
         pos.y += physics.velY * Fixed_Timestep;
@@ -61,11 +61,11 @@ public class PhysicsSystem extends IntervalIteratingSystem {
         BoundsComponent bounds = Mappers.bounds.get(entity);
         CollideComponent collide = Mappers.collide.get(entity);
 
-        if(collide == null || bounds == null) return;
-        tileCollision(pos,physics,bounds,collide);
+        if (collide == null || bounds == null) return;
+        tileCollision(pos, physics, bounds, collide);
     }
 
-    private void tileCollision(PositionComponent pos, PhysicsComponent physics, BoundsComponent bounds, CollideComponent collide){
+    private void tileCollision(PositionComponent pos, PhysicsComponent physics, BoundsComponent bounds, CollideComponent collide) {
         int tX, tY, ttX, ttY;
         float sideX, sideY;
         collide.touching = Touch.NONE;
