@@ -4,7 +4,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.crown.prince.components.*;
-import com.crown.prince.systems.CollisionSystem;
+import com.crown.prince.systems.PhysicsSystem;
+import com.crown.prince.systems.PlayerSystem;
 import com.crown.prince.systems.RenderSystem;
 
 public class World {
@@ -33,6 +34,7 @@ public class World {
     public void create(){
         Entity player = createPlayer(100f,100f);
 
+        engine.getSystem(PlayerSystem.class).setPlayer(player);
         createCamera(player);
 
         loadMap("test");
@@ -95,7 +97,7 @@ public class World {
         mapLoader.load(name, map);
 
         engine.getSystem(RenderSystem.class).setTileMap(map);
-        engine.getSystem(CollisionSystem.class).grid = mapLoader.createCollisionGrid("collision");
+        engine.getSystem(PhysicsSystem.class).grid = mapLoader.createCollisionGrid("collision");
 
     }
 }

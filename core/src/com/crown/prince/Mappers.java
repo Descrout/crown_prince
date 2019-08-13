@@ -11,5 +11,6 @@ public final class Mappers {
     public static final ComponentMapper<PhysicsComponent> physics = ComponentMapper.getFor(PhysicsComponent.class);
     public static final ComponentMapper<CollideComponent> collide = ComponentMapper.getFor(CollideComponent.class);
     public static final ComponentMapper<BoundsComponent> bounds = ComponentMapper.getFor(BoundsComponent.class);
+    public static final ComponentMapper<PlayerComponent> player = ComponentMapper.getFor(PlayerComponent.class);
 
 }

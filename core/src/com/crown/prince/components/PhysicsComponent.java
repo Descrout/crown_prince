@@ -12,4 +12,5 @@ public class PhysicsComponent implements Component {
     public float friction = 0.7f; // default for all
     public float gravity = 20f; // default for all
     public int maxVelY = 440; // default for all
+    public boolean controlled = false;
 }

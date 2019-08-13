@@ -21,7 +21,7 @@ public class GameScreen implements com.badlogic.gdx.Screen {
         engine.addSystem(new CameraSystem());
         engine.addSystem(new RenderSystem(game.batch,game.cam));
         engine.addSystem(new PhysicsSystem());
-        engine.addSystem(new CollisionSystem());
+        engine.addSystem(new PlayerSystem());
 
         world.create();
     }
@@ -32,6 +32,7 @@ public class GameScreen implements com.badlogic.gdx.Screen {
     }
 
     private void update(float delta){
+        delta = Math.min(0.25f,delta);
         engine.update(delta);
     }
 
