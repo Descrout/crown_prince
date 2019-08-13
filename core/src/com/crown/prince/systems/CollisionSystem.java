@@ -59,7 +59,10 @@ public class CollisionSystem extends IteratingSystem {
             tX = getTileNum(physics.oldX + (i * TILE_SIZE));
             collide.colTilesHori[i] = getTileAt(tX, tY);
             if (getPosition(tX) > physics.oldX + bounds.w || getPosition(tX) + TILE_SIZE < pos.x) continue;
-            if (collide.colTilesHori[i] == 1) collDetectHori = true;
+            if (collide.colTilesHori[i] == 1) {
+                collDetectHori = true;
+                break;
+            }
         }
 
 
@@ -70,9 +73,13 @@ public class CollisionSystem extends IteratingSystem {
             if (collDetectHori && tX == ttX && tY == ttY) continue;
             collide.colTilesVerti[i] = getTileAt(tX, tY);
             if (getPosition(tY) > physics.oldY + bounds.h || getPosition(tY) + TILE_SIZE < pos.y) continue;
-            if (collide.colTilesVerti[i] == 1) collDetectVerti = true;
+            if (collide.colTilesVerti[i] == 1) {
+                collDetectVerti = true;
+                break;
+            }
         }
 
+        collide.touching = Touch.NONE;
         if (collDetectVerti) {
             if (physics.velX > 0) {
                 pos.x = pos.x - ((pos.x + bounds.w) % TILE_SIZE) - 0.1f;
