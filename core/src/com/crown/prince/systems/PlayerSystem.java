@@ -5,10 +5,7 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.crown.prince.*;
-import com.crown.prince.components.AnimationComponent;
-import com.crown.prince.components.CollideComponent;
-import com.crown.prince.components.PhysicsComponent;
-import com.crown.prince.components.PlayerComponent;
+import com.crown.prince.components.*;
 
 public class PlayerSystem extends EntitySystem {
     Entity player;
@@ -17,49 +14,50 @@ public class PlayerSystem extends EntitySystem {
     PhysicsComponent physics;
     PlayerComponent playerComponent;
     CollideComponent collide;
+    ScaleComponent scale;
 
     FSM brain;
 
-    public PlayerSystem(){
+    public PlayerSystem() {
         brain = new FSM(this::normalState);
     }
 
-    private void normalState(){
+    private void normalState() {
         playerControl();
         animControl();
     }
 
-    private void playerControl(){
-        if(playerComponent.keyRight){
+    private void playerControl() {
+        if (playerComponent.keyRight) {
             playerComponent.facingRight = true;
             physics.accX += Constants.playerSpeed;
         }
-        if(playerComponent.keyLeft){
+        if (playerComponent.keyLeft) {
             playerComponent.facingRight = false;
             physics.accX -= Constants.playerSpeed;
         }
-        if(playerComponent.keyUp && playerComponent.canJump){
+        if (playerComponent.keyUp && playerComponent.canJump) {
             physics.accY += Constants.playerJump;
             anim.time = 0f;
         }
     }
 
-    private void keyRegister(){
+    private void keyRegister() {
         physics.controlled = playerComponent.keyDown = playerComponent.keyLeft = playerComponent.keyRight = playerComponent.keyUp = false;
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)){
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             playerComponent.keyLeft = true;
             physics.controlled = true;
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             playerComponent.keyRight = true;
             physics.controlled = true;
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             playerComponent.keyUp = true;
         }
 
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)){
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             playerComponent.keyDown = true;
         }
     }
@@ -72,7 +70,14 @@ public class PlayerSystem extends EntitySystem {
             if (physics.velY < 0) anim.state = PlayerComponent.FALL;
             else anim.state = PlayerComponent.JUMP;
         }
-        //System.out.println(anim.state);
+
+        if(playerComponent.facingRight){
+            scale.scaleX = 1;
+            scale.drawX = -20;
+        }else{
+            scale.scaleX = -1;
+            scale.drawX = 48;
+        }
     }
 
     @Override
@@ -83,11 +88,12 @@ public class PlayerSystem extends EntitySystem {
 
     }
 
-    public void setPlayer(Entity player){
+    public void setPlayer(Entity player) {
         this.player = player;
         anim = Mappers.anim.get(player);
         physics = Mappers.physics.get(player);
         playerComponent = Mappers.player.get(player);
         collide = Mappers.collide.get(player);
+        scale = Mappers.scale.get(player);
     }
 }

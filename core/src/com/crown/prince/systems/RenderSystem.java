@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -57,34 +58,43 @@ public class RenderSystem extends EntitySystem {
             if (tex.region == null) continue;
             PositionComponent pos = Mappers.position.get(entity);
 
+            ScaleComponent scale = Mappers.scale.get(entity);
+            if(scale==null)
             batch.draw(tex.region, pos.x, pos.y);
+            else batch.draw(tex.region, pos.x+scale.drawX, pos.y+scale.drawY,scale.drawWidth*scale.scaleX,scale.drawHeight*scale.scaleY);
 
-            BoundsComponent bounds = Mappers.bounds.get(entity);
-            if(bounds==null) continue;
-            shapeRenderer.setColor(1f,1f,1f,1f);
-            shapeRenderer.rect(pos.x,pos.y,bounds.w,bounds.h);
 
-            CollideComponent collide = Mappers.collide.get(entity);
-            if(collide==null) continue;
 
-            PhysicsComponent physics = Mappers.physics.get(entity);
+            if(Gdx.input.isButtonPressed(0)){ // debug
+                BoundsComponent bounds = Mappers.bounds.get(entity);
+                if(bounds==null) continue;
+                shapeRenderer.setColor(1f,1f,1f,1f);
+                shapeRenderer.rect(pos.x,pos.y,bounds.w,bounds.h);
 
-            float sideY,sideX;
-            if (physics.velY > 0) sideY = pos.y + bounds.h;
-            else sideY = pos.y;
-            if (physics.velX > 0) {
-                sideX = pos.x + bounds.w;
-            } else {
-                sideX = pos.x;
-            }
-            shapeRenderer.setColor(1f,0f,0f,1f);
-            for(int j = 0; j<collide.wCount;j++){
-                shapeRenderer.rect(physics.oldX+(j*TILE_SIZE),sideY,TILE_SIZE,TILE_SIZE);
-            }
+                CollideComponent collide = Mappers.collide.get(entity);
+                if(collide==null) continue;
 
-            shapeRenderer.setColor(0f,1f,0f,1f);
-            for(int j = 0; j<collide.hCount;j++){
-                shapeRenderer.rect(sideX,physics.oldY+(j*TILE_SIZE),TILE_SIZE,TILE_SIZE);
+                PhysicsComponent physics = Mappers.physics.get(entity);
+
+                int sideX, sideY;
+                if (physics.velX > 0)sideX = (int)((pos.x + bounds.w)/TILE_SIZE);
+                else sideX = (int)((pos.x)/TILE_SIZE);
+
+                if (physics.velY > 0) sideY = (int)((pos.y + bounds.h)/TILE_SIZE);
+                else sideY = (int)((pos.y)/TILE_SIZE);
+
+
+                shapeRenderer.setColor(1f,0f,0f,1f);
+                for(int j = 0, tile; j < collide.colTilesHori.size; j++){
+                    float test = physics.oldX + collide.colTilesHori.get(j);
+                    shapeRenderer.rect(((int)(test/TILE_SIZE))*TILE_SIZE,sideY*TILE_SIZE,TILE_SIZE,TILE_SIZE);
+                }
+
+                shapeRenderer.setColor(1f,1f,0f,1f);
+                for(int j = 0, tile; j < collide.colTilesVerti.size; j++){
+                    float test = physics.oldY + collide.colTilesVerti.get(j);
+                    shapeRenderer.rect(sideX*TILE_SIZE,((int)(test/TILE_SIZE))*TILE_SIZE,TILE_SIZE,TILE_SIZE);
+                }
             }
         }
 

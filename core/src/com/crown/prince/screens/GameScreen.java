@@ -34,6 +34,7 @@ public class GameScreen implements com.badlogic.gdx.Screen {
     private void update(float delta){
         delta = Math.min(0.25f,delta);
         engine.update(delta);
+
     }
 
     @Override

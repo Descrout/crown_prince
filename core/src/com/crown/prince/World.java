@@ -62,8 +62,14 @@ public class World {
         PhysicsComponent physics = engine.createComponent(PhysicsComponent.class);
         BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
         CollideComponent collide = engine.createComponent(CollideComponent.class);
+        ScaleComponent scale = engine.createComponent(ScaleComponent.class);
 
-        bounds.setBounds(200,200);
+        //scale değerlerini gir ve player systeminde işlemleri yap
+
+        scale.drawWidth = assets.adventurerIdling.getKeyFrame(0f).getRegionWidth() +20;
+        scale.drawHeight = assets.adventurerIdling.getKeyFrame(0f).getRegionHeight() +20;
+
+        bounds.setBounds(26,39);
 
         collide.init(bounds.w, bounds.h);
 
@@ -83,6 +89,7 @@ public class World {
         entity.add(physics);
         entity.add(bounds);
         entity.add(collide);
+        entity.add(scale);
 
         engine.addEntity(entity);
 

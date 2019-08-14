@@ -21,10 +21,6 @@ public class PhysicsSystem extends IntervalIteratingSystem {
         super(Family.all(PositionComponent.class, PhysicsComponent.class).get(), Fixed_Timestep);
     }
 
-    public int getPosition(int xy) {
-        return xy * TILE_SIZE;
-    }
-
     public int getTileNum(float xy) {
         return (int) (xy / TILE_SIZE);
     }
@@ -66,46 +62,41 @@ public class PhysicsSystem extends IntervalIteratingSystem {
     }
 
     private void tileCollision(PositionComponent pos, PhysicsComponent physics, BoundsComponent bounds, CollideComponent collide) {
-        int tX, tY, ttX, ttY;
-        float sideX, sideY;
+        int sideX, sideY;
+
         collide.touching = Touch.NONE;
 
-        if (physics.velX > 0) {
-            sideX = pos.x + bounds.w;
-            ttX = getTileNum(physics.oldX + ((collide.wCount - 1) * TILE_SIZE));
-        } else {
-            sideX = pos.x;
-            ttX = getTileNum(physics.oldX);
-        }
-        if (physics.velY > 0) sideY = pos.y + bounds.h;
-        else sideY = pos.y;
+        if (physics.velX > 0)sideX = getTileNum(pos.x + bounds.w);
+        else sideX = getTileNum(pos.x);
 
-        boolean collDetectHori = false;
-        tY = ttY = getTileNum(sideY);
-        for (int i = 0; i < collide.wCount; i++) {
-            tX = getTileNum(physics.oldX + (i * TILE_SIZE));
-            collide.colTilesHori[i] = getTileAt(tX, tY);
-            //if (getPosition(tX) > physics.oldX + bounds.w || getPosition(tX) + TILE_SIZE < pos.x) continue;
-            if (collide.colTilesHori[i] == 1) {
+        if (physics.velY > 0) sideY = getTileNum(pos.y + bounds.h);
+        else sideY = getTileNum(pos.y);
+
+        int tX = -1;
+        for(int i = 0, tile; i < collide.colTilesHori.size; i++){
+            tX = getTileNum(physics.oldX + collide.colTilesHori.get(i));
+            tile = getTileAt(tX,sideY);
+            if(tile == 1){
                 if (physics.velY < 0) {
-                    pos.y = pos.y - (pos.y % TILE_SIZE) + TILE_SIZE + 0.1f;
+                    pos.y = pos.y - ((pos.y) % TILE_SIZE) + TILE_SIZE  + 0.1f;
                     collide.touching |= Touch.FLOOR;
                 } else {
                     pos.y = pos.y - ((pos.y + bounds.h) % TILE_SIZE) - 0.1f;
                     collide.touching |= Touch.CEILING;
                 }
                 physics.velY = 0;
-                collDetectHori = true;
                 break;
             }
+            //else
+            tX = -1;
         }
-        tX = getTileNum(sideX);
-        for (int i = 0; i < collide.hCount; i++) {
-            tY = getTileNum(physics.oldY + (i * TILE_SIZE));
-            if (collDetectHori && tX == ttX && tY == ttY) continue; // Checking for overlaps with horizontal
-            collide.colTilesVerti[i] = getTileAt(tX, tY);
-            //if (getPosition(tY) > physics.oldY + bounds.h || getPosition(tY) + TILE_SIZE < pos.y) continue;
-            if (collide.colTilesVerti[i] == 1) {
+
+        int tY;
+        for(int i = 0, tile; i < collide.colTilesVerti.size; i++){
+            tY = getTileNum(physics.oldY + collide.colTilesVerti.get(i));
+            if(tX == sideX && tY == sideY) break; // check horizontal x vertical overlaps
+            tile = getTileAt(sideX,tY);
+            if(tile == 1){
                 if (physics.velX > 0) {
                     pos.x = pos.x - ((pos.x + bounds.w) % TILE_SIZE) - 0.1f;
                     collide.touching |= Touch.RIGHT_SIDE;
