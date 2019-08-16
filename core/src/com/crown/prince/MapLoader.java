@@ -2,19 +2,23 @@ package com.crown.prince;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
+import com.badlogic.gdx.utils.XmlReader.Element;
 
+import static com.crown.prince.Constants.TILE_SIZE;
 import static com.crown.prince.World.tileNumX;
 import static com.crown.prince.World.tileNumY;
 
 public class MapLoader {
-    private XmlReader.Element root;
-
-    public MapLoader() {
-
+    private Element root;
+    private Element objects;
+    private World world;
+    public MapLoader(World world) {
+        this.world = world;
     }
 
-    public void load(String name, TileMap map) {
+    public void load(String name) {
         XmlReader reader = new XmlReader();
         FileHandle file = Gdx.files.internal("maps/" + name + ".oel");
         root = reader.parse(file.readString());
@@ -22,13 +26,49 @@ public class MapLoader {
         World.width = root.getIntAttribute("width");
         World.height = root.getIntAttribute("height");
 
-        tileNumX = (int) Math.floor(World.width / Constants.TILE_SIZE);
-        tileNumY = (int) Math.floor(World.height / Constants.TILE_SIZE);
+        tileNumX = (int) Math.floor(World.width / TILE_SIZE);
+        tileNumY = (int) Math.floor(World.height / TILE_SIZE);
 
-        map.backgrounTiles = createLayer("background");
-        map.mainTiles = createLayer("tiles");
-        map.foregroundTiles = createLayer("foreground");
+        world.map.backgrounTiles = createLayer("background");
+        world.map.mainTiles = createLayer("tiles");
+        world.map.foregroundTiles = createLayer("foreground");
 
+        loadObjects();
+    }
+
+    private void loadObjects(){
+        objects = root.getChildByName("objects");
+        loadPlayer();
+        loadPlatforms();
+    }
+
+    private void loadPlayer(){
+        Element player = objects.getChildByName("player");
+        int x = player.getIntAttribute("x");
+        int y = World.height - player.getIntAttribute("y") - TILE_SIZE;
+        world.createPlayer(x,y);
+    }
+
+    private void loadPlatforms(){
+        Array<Element> colliders = objects.getChildrenByName("platform");
+        for(Element collider: colliders){
+            int w = collider.getIntAttribute("width");
+            int h = collider.getIntAttribute("height");
+            int x = collider.getIntAttribute("x");
+            int y = World.height - collider.getIntAttribute("y") - h;
+            int velX = collider.getIntAttribute("velX");
+            int velY = collider.getIntAttribute("velY");
+            int changeX = collider.getIntAttribute("changeX");
+            int changeY = collider.getIntAttribute("changeY");
+
+            int allowCollision = 0;
+            if (collider.getBoolean("left")) allowCollision |= Touch.LEFT_SIDE;
+            if (collider.getBoolean("right")) allowCollision |= Touch.RIGHT_SIDE;
+            if (collider.getBoolean("up")) allowCollision |= Touch.CEILING;
+            if (collider.getBoolean("down")) allowCollision |= Touch.FLOOR;
+
+            world.createPlatform(x,y,w,h,velX,velY,changeX,changeY,allowCollision);
+        }
     }
 
     public int[][] createLayer(String layerName) {

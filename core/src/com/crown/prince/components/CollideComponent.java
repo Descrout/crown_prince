@@ -2,13 +2,21 @@ package com.crown.prince.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
 
 import static com.crown.prince.Constants.TILE_SIZE;
 
-public class CollideComponent implements Component {
+public class CollideComponent implements Component, Pool.Poolable {
     public int touching = 0;
     public Array<Integer> colTilesHori;
     public Array<Integer> colTilesVerti;
+
+    @Override
+    public void reset() {
+        colTilesVerti = null;
+        colTilesHori = null;
+        touching = 0;
+    }
 
 
     public void init(int w, int h){
@@ -35,4 +43,6 @@ public class CollideComponent implements Component {
         }
 
     }
+
+
 }

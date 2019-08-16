@@ -1,24 +1,32 @@
 package com.crown.prince.systems;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IntervalIteratingSystem;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.crown.prince.Calculation;
 import com.crown.prince.Mappers;
 import com.crown.prince.Touch;
 import com.crown.prince.World;
-import com.crown.prince.components.BoundsComponent;
-import com.crown.prince.components.CollideComponent;
-import com.crown.prince.components.PhysicsComponent;
-import com.crown.prince.components.PositionComponent;
+import com.crown.prince.components.*;
 
 import static com.crown.prince.Constants.TILE_SIZE;
 
 public class PhysicsSystem extends IntervalIteratingSystem {
     public static final float Fixed_Timestep = 1 / 50f;
     public int[][] grid;
+    private ImmutableArray<Entity> colliders;
 
     public PhysicsSystem() {
         super(Family.all(PositionComponent.class, PhysicsComponent.class).get(), Fixed_Timestep);
+    }
+
+    @Override
+    public void addedToEngine(Engine engine) {
+        super.addedToEngine(engine);
+
+        colliders = engine.getEntitiesFor(Family.all(ColliderComponent.class,PositionComponent.class,BoundsComponent.class, PhysicsComponent.class).get());
     }
 
     public int getTileNum(float xy) {
@@ -59,6 +67,39 @@ public class PhysicsSystem extends IntervalIteratingSystem {
 
         if (collide == null || bounds == null) return;
         tileCollision(pos, physics, bounds, collide);
+        colliderCollision(pos, physics, bounds, collide);
+    }
+
+    private void colliderCollision(PositionComponent pos, PhysicsComponent physics, BoundsComponent bounds, CollideComponent collide){
+        for(int i = 0; i < colliders.size(); ++i){
+            Entity entity = colliders.get(i);
+            PositionComponent cPos = Mappers.position.get(entity);
+            BoundsComponent cBounds = Mappers.bounds.get(entity);
+
+            if(!Calculation.overlaps(pos,bounds,cPos,cBounds))continue;
+
+            ColliderComponent cCollider = Mappers.collider.get(entity);
+            PhysicsComponent cPhysics = Mappers.physics.get(entity);
+
+            if(Calculation.doesAllow(cCollider.allowCollision,Touch.FLOOR) && pos.y+bounds.h >= cPos.y && physics.oldY+bounds.h < cPhysics.oldY){
+                pos.y = cPos.y - bounds.h - 0.1f;
+                physics.velY = cPhysics.velY;
+                collide.touching |= Touch.CEILING;
+            }else if(Calculation.doesAllow(cCollider.allowCollision,Touch.CEILING) && pos.y <= cPos.y+cBounds.h && physics.oldY > cPhysics.oldY+cBounds.h){
+                pos.y = cPos.y+cBounds.h+0.1f;
+                physics.velY = cPhysics.velY;
+                if(cPhysics.velX != 0 && !physics.controlled)physics.velX = cPhysics.velX / physics.friction;
+                collide.touching |= Touch.FLOOR;
+            }else if(Calculation.doesAllow(cCollider.allowCollision,Touch.LEFT_SIDE) && pos.x+bounds.w >= cPos.x && physics.oldX+bounds.w < cPhysics.oldX){
+                pos.x = cPos.x-bounds.w-0.1f;
+                physics.velX = cPhysics.velX;
+                collide.touching |= Touch.RIGHT_SIDE;
+            }else if(Calculation.doesAllow(cCollider.allowCollision,Touch.RIGHT_SIDE) && pos.x <= cPos.x+cBounds.w && physics.oldX > cPhysics.oldX+cBounds.w){
+                pos.x = cPos.x+cBounds.w+0.1f;
+                physics.velX = cPhysics.velX;
+                collide.touching |= Touch.LEFT_SIDE;
+            }
+        }
     }
 
     private void tileCollision(PositionComponent pos, PhysicsComponent physics, BoundsComponent bounds, CollideComponent collide) {

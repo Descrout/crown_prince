@@ -3,6 +3,7 @@ package com.crown.prince;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.crown.prince.components.*;
 import com.crown.prince.systems.PhysicsSystem;
 import com.crown.prince.systems.PlayerSystem;
@@ -15,7 +16,7 @@ public class World {
     private Assets assets;
 
     private MapLoader mapLoader;
-    private TileMap map;
+    public TileMap map;
 
 
     public static int width = 0;
@@ -28,31 +29,77 @@ public class World {
         this.engine = engine;
         this.cam = cam;
         this.assets = assets;
-        mapLoader = new MapLoader();
+        mapLoader = new MapLoader(this);
+        map = new TileMap(assets.tiles);
+
     }
 
     public void create(){
-        Entity player = createPlayer(100f,100f);
-
-        engine.getSystem(PlayerSystem.class).setPlayer(player);
-        createCamera(player);
-
         loadMap("test");
+    }
+
+    public void loadMap(String name){
+        engine.removeAllEntities();
+        mapLoader.load(name);
+
+        engine.getSystem(RenderSystem.class).setTileMap(map);
+        engine.getSystem(PhysicsSystem.class).grid = mapLoader.createCollisionGrid("collision");
+
     }
 
     private void createCamera(Entity target) {
         Entity entity = engine.createEntity();
 
-        CameraComponent camera = new CameraComponent();
+        CameraComponent camera = engine.createComponent(CameraComponent.class);
         camera.camera = this.cam;
         camera.target = target;
 
         entity.add(camera);
+        engine.addEntity(entity);
+    }
+
+    public void createPlatform(int x,int y,int w,int h,int velX,int velY,int changeX,int changeY,int allowCollision){
+        Entity entity = engine.createEntity();
+
+        PositionComponent position = engine.createComponent(PositionComponent.class);
+        TextureComponent texture = engine.createComponent(TextureComponent.class);
+        PhysicsComponent physics = engine.createComponent(PhysicsComponent.class);
+        BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
+        ColliderComponent collider = engine.createComponent(ColliderComponent.class);
+        ScaleComponent scale = engine.createComponent(ScaleComponent.class);
+        MoverComponent mover = engine.createComponent(MoverComponent.class);
+
+        position.x = x;
+        position.y = y;
+        bounds.setBounds(w,h);
+
+        physics.velX = mover.velX = velX;
+        physics.velY = mover.velY = velY;
+        physics.gravity = 0;
+        physics.friction = 1;
+
+        mover.changeX = changeX;
+        mover.changeY = changeY;
+        collider.allowCollision = allowCollision;
+
+        texture.region = new TextureRegion(assets.tiles);
+        texture.region.setRegion((40*7)+5,0,35,40);
+
+        scale.drawWidth = w;
+        scale.drawHeight = h;
+
+        entity.add(position);
+        entity.add(texture);
+        entity.add(physics);
+        entity.add(bounds);
+        entity.add(collider);
+        entity.add(scale);
+        entity.add(mover);
 
         engine.addEntity(entity);
     }
 
-    private Entity createPlayer(float x, float y){
+    public void createPlayer(float x, float y){
         Entity entity = engine.createEntity();
 
         PositionComponent position = engine.createComponent(PositionComponent.class);
@@ -93,18 +140,11 @@ public class World {
 
         engine.addEntity(entity);
 
-        return entity;
+        engine.getSystem(PlayerSystem.class).setPlayer(entity);
+        createCamera(entity);
     }
 
 
 
-    public void loadMap(String name){
-        map = new TileMap(assets.tiles);
 
-        mapLoader.load(name, map);
-
-        engine.getSystem(RenderSystem.class).setTileMap(map);
-        engine.getSystem(PhysicsSystem.class).grid = mapLoader.createCollisionGrid("collision");
-
-    }
 }
