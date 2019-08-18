@@ -8,6 +8,7 @@ import com.crown.prince.components.*;
 import com.crown.prince.systems.PhysicsSystem;
 import com.crown.prince.systems.PlayerSystem;
 import com.crown.prince.systems.RenderSystem;
+import javafx.scene.effect.Light;
 
 public class World {
 
@@ -110,6 +111,7 @@ public class World {
         BoundsComponent bounds = engine.createComponent(BoundsComponent.class);
         CollideComponent collide = engine.createComponent(CollideComponent.class);
         ScaleComponent scale = engine.createComponent(ScaleComponent.class);
+        LightComponent light = engine.createComponent(LightComponent.class);
 
         //scale değerlerini gir ve player systeminde işlemleri yap
 
@@ -137,6 +139,7 @@ public class World {
         entity.add(bounds);
         entity.add(collide);
         entity.add(scale);
+        entity.add(light);
 
         engine.addEntity(entity);
 

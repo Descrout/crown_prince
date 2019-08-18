@@ -63,11 +63,6 @@ public class RenderSystem extends EntitySystem {
             batch.draw(tex.region, pos.x, pos.y);
             else batch.draw(tex.region, pos.x+scale.drawX, pos.y+scale.drawY,scale.drawWidth*scale.scaleX,scale.drawHeight*scale.scaleY);
 
-            BoundsComponent bounds = Mappers.bounds.get(entity);
-            if(bounds==null) continue;
-            shapeRenderer.setColor(1f,1f,1f,1f);
-            shapeRenderer.rect(pos.x,pos.y,bounds.w,bounds.h);
-
             /*
             if(Gdx.input.isButtonPressed(0)){ // debug
                 BoundsComponent bounds = Mappers.bounds.get(entity);

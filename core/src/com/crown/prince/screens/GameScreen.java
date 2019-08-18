@@ -1,8 +1,10 @@
 package com.crown.prince.screens;
 
 import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.math.Vector2;
 import com.crown.prince.Main;
 import com.crown.prince.World;
+import com.crown.prince.components.LightComponent;
 import com.crown.prince.systems.*;
 
 public class GameScreen implements com.badlogic.gdx.Screen {
@@ -23,6 +25,7 @@ public class GameScreen implements com.badlogic.gdx.Screen {
         engine.addSystem(new PhysicsSystem());
         engine.addSystem(new PlayerSystem());
         engine.addSystem(new MoverSystem());
+        engine.addSystem(new LightSystem(game.batch));
 
         world.create();
     }
@@ -46,7 +49,7 @@ public class GameScreen implements com.badlogic.gdx.Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        engine.getSystem(LightSystem.class).setScreen(width,height);
     }
 
     @Override
