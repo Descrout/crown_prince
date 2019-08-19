@@ -22,24 +22,29 @@ uniform sampler2D u_sampler2D;
 
 uniform Light lights[NUM_LIGHTS];
 uniform int num_lights;
-uniform vec2 screen;
+
+uniform vec2 world;
+
+uniform mat4 u_projTrans;
+
+varying vec3 v_position;
 
 
 void main() {
     vec4 color = texture2D(u_sampler2D, v_texCoord0);
 
-    vec2 norm_screen = gl_FragCoord.xy / screen;
+    vec2 norm_screen = v_position.xy / world;
 
-    vec3 diffuse = vec3(0.1f,0.1f,0.1f);
+    vec3 diffuse = vec3(0f);
 
     for(int i = 0; i < num_lights; i++){
         Light light = lights[i];
-        vec2 norm_pos = light.position / screen;
+        vec2 norm_pos = light.position / world;
 
         float distance = length(norm_pos - norm_screen) * light.power;
         float attenuation = 1.0 / (constant + linear * distance + quadratic * (distance*distance));
 
-        diffuse += light.diffuse;
+        diffuse += light.diffuse * attenuation;
     }
 
     diffuse = clamp(diffuse, 0f, 1f);

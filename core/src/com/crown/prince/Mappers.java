@@ -15,5 +15,6 @@ public final class Mappers {
     public static final ComponentMapper<ScaleComponent> scale = ComponentMapper.getFor(ScaleComponent.class);
     public static final ComponentMapper<MoverComponent> mover = ComponentMapper.getFor(MoverComponent.class);
     public static final ComponentMapper<ColliderComponent> collider = ComponentMapper.getFor(ColliderComponent.class);
+    public static final ComponentMapper<LightComponent> light = ComponentMapper.getFor(LightComponent.class);
 
 }

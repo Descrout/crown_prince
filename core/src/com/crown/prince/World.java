@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector3;
 import com.crown.prince.components.*;
 import com.crown.prince.systems.PhysicsSystem;
 import com.crown.prince.systems.PlayerSystem;
@@ -69,6 +70,7 @@ public class World {
         ColliderComponent collider = engine.createComponent(ColliderComponent.class);
         ScaleComponent scale = engine.createComponent(ScaleComponent.class);
         MoverComponent mover = engine.createComponent(MoverComponent.class);
+        LightComponent light = engine.createComponent(LightComponent.class);
 
         position.x = x;
         position.y = y;
@@ -89,6 +91,8 @@ public class World {
         scale.drawWidth = w;
         scale.drawHeight = h;
 
+        light.set(new Vector3(1f,0f,0f),100f);
+
         entity.add(position);
         entity.add(texture);
         entity.add(physics);
@@ -96,6 +100,7 @@ public class World {
         entity.add(collider);
         entity.add(scale);
         entity.add(mover);
+        entity.add(light);
 
         engine.addEntity(entity);
     }
@@ -130,6 +135,9 @@ public class World {
 
         position.x = physics.oldX = x;
         position.y = physics.oldY = y;
+
+        light.set(new Vector3(1f,1f,1f),64f);
+
 
         entity.add(position);
         entity.add(texture);

@@ -6,9 +6,11 @@ import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.crown.prince.Mappers;
+import com.crown.prince.World;
 import com.crown.prince.components.LightComponent;
 import com.crown.prince.components.PositionComponent;
 
@@ -25,27 +27,28 @@ public class LightSystem extends EntitySystem {
 
     public void addedToEngine(Engine engine) {
         entities = engine.getEntitiesFor(Family.all(PositionComponent.class, LightComponent.class).get());
+
     }
 
     @Override
     public void update(float deltaTime) {
         int num_lights = entities.size();
-
+        shader.begin();
         shader.setUniformi("num_lights",num_lights);
-
+        shader.setUniformf("world",World.width, World.height);
         for(int i = 0; i < num_lights; i++){
             Entity entity = entities.get(i);
 
             PositionComponent pos = Mappers.position.get(entity);
+            LightComponent lightComp = Mappers.light.get(entity);
+
             String light = "lights["+i+"]";
             shader.setUniformf(light+".position",pos.x,pos.y);
-            shader.setUniformf(light+".diffuse",1f,1f,1f);
-            shader.setUniformf(light+".power",64f);
+            shader.setUniformf(light+".diffuse",lightComp.color);
+            shader.setUniformf(light+".power",lightComp.power);
         }
 
+        shader.end();
     }
 
-    public void setScreen(int width, int height){
-        shader.setUniformf("screen",width,height);
-    }
 }

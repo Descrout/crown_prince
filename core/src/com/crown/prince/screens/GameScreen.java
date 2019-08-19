@@ -49,7 +49,7 @@ public class GameScreen implements com.badlogic.gdx.Screen {
 
     @Override
     public void resize(int width, int height) {
-        engine.getSystem(LightSystem.class).setScreen(width,height);
+
     }
 
     @Override
