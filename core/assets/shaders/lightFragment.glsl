@@ -25,8 +25,6 @@ uniform int num_lights;
 
 uniform vec2 world;
 
-uniform mat4 u_projTrans;
-
 varying vec3 v_position;
 
 
@@ -35,7 +33,7 @@ void main() {
 
     vec2 norm_screen = v_position.xy / world;
 
-    vec3 diffuse = vec3(0f);
+    vec3 diffuse = vec3(0);
 
     for(int i = 0; i < num_lights; i++){
         Light light = lights[i];

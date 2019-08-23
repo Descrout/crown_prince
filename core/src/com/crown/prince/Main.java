@@ -51,7 +51,6 @@ public class Main extends Game {
 	@Override
 	public void resize(int width, int height){
 		viewport.update(width,height);
-		super.resize(width,height);
 	}
 
 	@Override

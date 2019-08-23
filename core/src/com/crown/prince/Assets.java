@@ -15,6 +15,7 @@ public class Assets {
     public Animation<TextureRegion> adventurerRun;
     public Animation<TextureRegion> adventurerJump;
     public Animation<TextureRegion> adventurerFall;
+    public Animation<TextureRegion> adventurerWallSlide;
 
 
     public TextureRegion tiles;
@@ -34,7 +35,7 @@ public class Assets {
         adventurerRun = new Animation(0.12F, atlas.findRegions("adventurer-run"), Animation.PlayMode.LOOP);
         adventurerJump = new Animation(0.12F, atlas.findRegions("adventurer-jump"), Animation.PlayMode.NORMAL);
         adventurerFall = new Animation(0.12F, atlas.findRegions("adventurer-fall"), Animation.PlayMode.LOOP);
-
+        adventurerWallSlide = new Animation(0.12F, atlas.findRegions("adventurer-wall-slide"), Animation.PlayMode.LOOP);
         tiles = atlas.findRegion("tileset");
     }
 

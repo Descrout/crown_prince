@@ -38,8 +38,8 @@ public class MapLoader {
 
     private void loadObjects(){
         objects = root.getChildByName("objects");
-        loadPlayer();
         loadPlatforms();
+        loadPlayer();
     }
 
     private void loadPlayer(){

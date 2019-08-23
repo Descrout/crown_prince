@@ -6,6 +6,6 @@ public final class Constants {
     public static final int ScreenW = 960;
     public static final int ScreenH = 540;
 
-    public static final int playerSpeed = 80;
-    public static final int playerJump = 440;
+    public static final int playerSpeed = 28;
+    public static final int playerJump = 500;
 }

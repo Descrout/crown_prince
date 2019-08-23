@@ -10,7 +10,8 @@ public class ScaleComponent implements Component, Pool.Poolable {
     public int drawHeight = 0;
     public int drawX = 0;
     public int drawY = 0;
-
+    public float x = 0;
+    public float y = 0;
     @Override
     public void reset() {
         scaleX = 1f;
@@ -19,5 +20,7 @@ public class ScaleComponent implements Component, Pool.Poolable {
         drawHeight = 0;
         drawX = 0;
         drawY = 0;
+        x = 0;
+        y = 0;
     }
 }

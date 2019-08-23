@@ -1,0 +1,132 @@
+
+placeHolder.png
+size: 2048,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+adventurer-fall
+  rotate: false
+  xy: 1132, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
+adventurer-fall
+  rotate: false
+  xy: 1184, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 1
+adventurer-idle
+  rotate: false
+  xy: 508, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
+adventurer-idle
+  rotate: false
+  xy: 560, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 1
+adventurer-idle
+  rotate: false
+  xy: 612, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 2
+adventurer-jump
+  rotate: false
+  xy: 456, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 1
+adventurer-jump
+  rotate: false
+  xy: 872, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
+adventurer-jump
+  rotate: false
+  xy: 1028, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 2
+adventurer-jump
+  rotate: false
+  xy: 1080, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 3
+adventurer-run
+  rotate: false
+  xy: 404, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 1
+adventurer-run
+  rotate: false
+  xy: 664, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 2
+adventurer-run
+  rotate: false
+  xy: 716, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 3
+adventurer-run
+  rotate: false
+  xy: 768, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 4
+adventurer-run
+  rotate: false
+  xy: 820, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 5
+adventurer-run
+  rotate: false
+  xy: 1236, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
+adventurer-wall-slide
+  rotate: false
+  xy: 924, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
+adventurer-wall-slide
+  rotate: false
+  xy: 976, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 1
+tileset
+  rotate: false
+  xy: 2, 2
+  size: 400, 40
+  orig: 400, 40
+  offset: 0, 0
+  index: -1

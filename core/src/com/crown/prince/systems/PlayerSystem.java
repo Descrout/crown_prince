@@ -15,6 +15,7 @@ public class PlayerSystem extends EntitySystem {
     PlayerComponent playerComponent;
     CollideComponent collide;
     ScaleComponent scale;
+    LightComponent light;
 
     FSM brain;
 
@@ -40,6 +41,29 @@ public class PlayerSystem extends EntitySystem {
             physics.accY += Constants.playerJump;
             anim.time = 0f;
         }
+
+        playerComponent.sliding = false;
+        if(physics.velY < 0){
+            if(Calculation.isTouching(collide.touching,Touch.RIGHT_SIDE)){
+                physics.velY *= 0.6;
+                playerComponent.sliding = true;
+                playerComponent.facingRight = true;
+                if(playerComponent.keyUp){
+                    physics.velY = Constants.playerJump;
+                    physics.accX -= 650f;
+                }
+            }
+            if(Calculation.isTouching(collide.touching,Touch.LEFT_SIDE)){
+                physics.velY *= 0.6;
+                playerComponent.sliding = true;
+                playerComponent.facingRight = false;
+                if(playerComponent.keyUp){
+                    physics.velY = Constants.playerJump;
+                    physics.accX += 650f;
+                }
+            }
+        }
+
     }
 
     private void keyRegister() {
@@ -63,7 +87,9 @@ public class PlayerSystem extends EntitySystem {
     }
 
     private void animControl() {
-        if (playerComponent.canJump) {
+        if(playerComponent.sliding){
+            anim.state = PlayerComponent.SLIDE;
+        }else if (playerComponent.canJump) {
             if (physics.controlled) anim.state = PlayerComponent.RUN;
             else anim.state = PlayerComponent.IDLE;
         } else {
@@ -85,7 +111,6 @@ public class PlayerSystem extends EntitySystem {
         playerComponent.canJump = Calculation.isTouching(collide.touching, Touch.FLOOR);
         keyRegister();
         brain.update();
-
     }
 
     public void setPlayer(Entity player) {
@@ -95,5 +120,6 @@ public class PlayerSystem extends EntitySystem {
         playerComponent = Mappers.player.get(player);
         collide = Mappers.collide.get(player);
         scale = Mappers.scale.get(player);
+        light = Mappers.light.get(player);
     }
 }

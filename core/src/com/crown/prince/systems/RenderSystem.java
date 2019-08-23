@@ -18,7 +18,7 @@ import static com.crown.prince.Constants.TILE_SIZE;
 
 
 public class RenderSystem extends EntitySystem {
-
+    public static float drawAlpha;
     private SpriteBatch batch;
     private ShapeRenderer shapeRenderer;
     private OrthographicCamera cam;
@@ -61,7 +61,11 @@ public class RenderSystem extends EntitySystem {
             ScaleComponent scale = Mappers.scale.get(entity);
             if(scale==null)
             batch.draw(tex.region, pos.x, pos.y);
-            else batch.draw(tex.region, pos.x+scale.drawX, pos.y+scale.drawY,scale.drawWidth*scale.scaleX,scale.drawHeight*scale.scaleY);
+            else{
+                scale.x += (pos.x - scale.x) * drawAlpha;
+                scale.y += (pos.y - scale.y) * drawAlpha;
+                batch.draw(tex.region, scale.x+scale.drawX, scale.y+scale.drawY,scale.drawWidth*scale.scaleX,scale.drawHeight*scale.scaleY);
+            }
 
             /*
             if(Gdx.input.isButtonPressed(0)){ // debug

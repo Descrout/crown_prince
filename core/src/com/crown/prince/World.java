@@ -9,7 +9,6 @@ import com.crown.prince.components.*;
 import com.crown.prince.systems.PhysicsSystem;
 import com.crown.prince.systems.PlayerSystem;
 import com.crown.prince.systems.RenderSystem;
-import javafx.scene.effect.Light;
 
 public class World {
 
@@ -55,6 +54,7 @@ public class World {
         CameraComponent camera = engine.createComponent(CameraComponent.class);
         camera.camera = this.cam;
         camera.target = target;
+        camera.lerp = 0.1f;
 
         entity.add(camera);
         engine.addEntity(entity);
@@ -70,7 +70,6 @@ public class World {
         ColliderComponent collider = engine.createComponent(ColliderComponent.class);
         ScaleComponent scale = engine.createComponent(ScaleComponent.class);
         MoverComponent mover = engine.createComponent(MoverComponent.class);
-        LightComponent light = engine.createComponent(LightComponent.class);
 
         position.x = x;
         position.y = y;
@@ -91,7 +90,6 @@ public class World {
         scale.drawWidth = w;
         scale.drawHeight = h;
 
-        light.set(new Vector3(1f,0f,0f),100f);
 
         entity.add(position);
         entity.add(texture);
@@ -100,6 +98,22 @@ public class World {
         entity.add(collider);
         entity.add(scale);
         entity.add(mover);
+
+        engine.addEntity(entity);
+    }
+
+    public void createStaticLight(float x, float y,Vector3 color,float power){
+        Entity entity = engine.createEntity();
+
+        PositionComponent position = engine.createComponent(PositionComponent.class);
+        LightComponent light = engine.createComponent(LightComponent.class);
+
+        position.x = x;
+        position.y = y;
+
+        light.set(color,power,false);
+
+        entity.add(position);
         entity.add(light);
 
         engine.addEntity(entity);
@@ -131,12 +145,15 @@ public class World {
         animation.animations.put(PlayerComponent.IDLE, assets.adventurerIdling);
         animation.animations.put(PlayerComponent.JUMP, assets.adventurerJump);
         animation.animations.put(PlayerComponent.FALL, assets.adventurerFall);
+        animation.animations.put(PlayerComponent.SLIDE,assets.adventurerWallSlide);
         animation.state = PlayerComponent.IDLE;
 
         position.x = physics.oldX = x;
         position.y = physics.oldY = y;
 
-        light.set(new Vector3(1f,1f,1f),64f);
+        physics.friction = 0.9f;
+
+        light.set(new Vector3(1f,1f,1f),70f,true);
 
 
         entity.add(position);

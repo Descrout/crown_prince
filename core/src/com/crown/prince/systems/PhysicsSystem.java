@@ -3,7 +3,7 @@ package com.crown.prince.systems;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IntervalIteratingSystem;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.crown.prince.Calculation;
 import com.crown.prince.Mappers;
@@ -13,33 +13,36 @@ import com.crown.prince.components.*;
 
 import static com.crown.prince.Constants.TILE_SIZE;
 
-public class PhysicsSystem extends IntervalIteratingSystem {
+public class PhysicsSystem extends IteratingSystem {
     public static final float Fixed_Timestep = 1 / 50f;
+    private float accumulator = 0f;
+
     public int[][] grid;
     private ImmutableArray<Entity> colliders;
 
+
     public PhysicsSystem() {
-        super(Family.all(PositionComponent.class, PhysicsComponent.class).get(), Fixed_Timestep);
+        super(Family.all(PositionComponent.class, PhysicsComponent.class).get());
     }
 
     @Override
     public void addedToEngine(Engine engine) {
         super.addedToEngine(engine);
-
         colliders = engine.getEntitiesFor(Family.all(ColliderComponent.class,PositionComponent.class,BoundsComponent.class, PhysicsComponent.class).get());
     }
 
-    public int getTileNum(float xy) {
-        return (int) (xy / TILE_SIZE);
-    }
-
-    public int getTileAt(int x, int y) {
-        if (x < 0 || y < 0 || x >= World.tileNumX || y >= World.tileNumY) return -1;
-        return grid[x][y];
+    @Override
+    public void update(float delta){
+        accumulator += delta;
+        while(accumulator >= Fixed_Timestep){
+            super.update(Fixed_Timestep);
+            accumulator -= Fixed_Timestep;
+        }
+        RenderSystem.drawAlpha = accumulator / Fixed_Timestep;
     }
 
     @Override
-    protected void processEntity(Entity entity) {
+    protected void processEntity(Entity entity, float deltaTime) {
         PositionComponent pos = Mappers.position.get(entity);
         PhysicsComponent physics = Mappers.physics.get(entity);
 
@@ -53,22 +56,41 @@ public class PhysicsSystem extends IntervalIteratingSystem {
         physics.velX += physics.accX;
         physics.velY += physics.accY;
 
+
         if (physics.velY > physics.maxVelY) physics.velY = physics.maxVelY;
         if (physics.velY < -physics.maxVelY) physics.velY = -physics.maxVelY;
 
-        pos.x += physics.velX * Fixed_Timestep;
-        pos.y += physics.velY * Fixed_Timestep;
+
+        pos.x += physics.velX * deltaTime;
+        pos.y += physics.velY * deltaTime;
 
         physics.accX = 0;
         physics.accY = 0;
 
-        BoundsComponent bounds = Mappers.bounds.get(entity);
         CollideComponent collide = Mappers.collide.get(entity);
+        if (collide != null){
+            BoundsComponent bounds = Mappers.bounds.get(entity);
+            if(bounds != null){
+            tileCollision(pos, physics, bounds, collide);
+            colliderCollision(pos, physics, bounds, collide);
+            }
+        }
 
-        if (collide == null || bounds == null) return;
-        tileCollision(pos, physics, bounds, collide);
-        colliderCollision(pos, physics, bounds, collide);
+        ScaleComponent scale = Mappers.scale.get(entity);
+        if(scale==null) return;
+        scale.x = pos.x;
+        scale.y = pos.y;
     }
+
+    public int getTileNum(float xy) {
+        return (int) (xy / TILE_SIZE);
+    }
+
+    public int getTileAt(int x, int y) {
+        if (x < 0 || y < 0 || x >= World.tileNumX || y >= World.tileNumY) return -1;
+        return grid[x][y];
+    }
+
 
     private void colliderCollision(PositionComponent pos, PhysicsComponent physics, BoundsComponent bounds, CollideComponent collide){
         for(int i = 0; i < colliders.size(); ++i){

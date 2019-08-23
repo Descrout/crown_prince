@@ -10,6 +10,7 @@ import com.crown.prince.Mappers;
 import com.crown.prince.World;
 import com.crown.prince.components.CameraComponent;
 import com.crown.prince.components.PositionComponent;
+import com.crown.prince.components.ScaleComponent;
 
 public class CameraSystem extends IteratingSystem {
     public CameraSystem(){
