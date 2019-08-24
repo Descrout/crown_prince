@@ -10,12 +10,14 @@ public class CollideComponent implements Component, Pool.Poolable {
     public int touching = 0;
     public Array<Integer> colTilesHori;
     public Array<Integer> colTilesVerti;
+    public int sideX = 0;
+    public int sideY = 0;
 
     @Override
     public void reset() {
         colTilesVerti = null;
         colTilesHori = null;
-        touching = 0;
+        touching = sideX = sideY = 0;
     }
 
 

@@ -19,11 +19,11 @@ public class GameScreen implements com.badlogic.gdx.Screen {
 
         world = new World(engine,game.cam,game.assets);
 
+        engine.addSystem(new PlayerSystem());
         engine.addSystem(new AnimationSystem());
         engine.addSystem(new CameraSystem());
         engine.addSystem(new RenderSystem(game.batch,game.cam,game.shapeRenderer));
         engine.addSystem(new PhysicsSystem());
-        engine.addSystem(new PlayerSystem());
         engine.addSystem(new MoverSystem());
         //engine.addSystem(new LightSystem(game.batch));
 

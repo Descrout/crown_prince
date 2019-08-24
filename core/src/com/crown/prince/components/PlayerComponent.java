@@ -9,6 +9,8 @@ public class PlayerComponent implements Component, Pool.Poolable {
     public static final int JUMP = 2;
     public static final int FALL = 3;
     public static final int SLIDE = 4;
+    public static final int CORNER_GRAB = 5;
+    public static final int CROUCH = 6;
 
     public boolean keyRight = false;
     public boolean keyLeft = false;
@@ -17,7 +19,9 @@ public class PlayerComponent implements Component, Pool.Poolable {
 
     public boolean canJump = false;
     public boolean facingRight = true;
-    public boolean sliding = false;
+    public boolean willHang = false;
+
+    public int hangTile = 0;
 
     @Override
     public void reset() {
@@ -28,6 +32,8 @@ public class PlayerComponent implements Component, Pool.Poolable {
 
         canJump = false;
         facingRight = true;
-        sliding = false;
+        willHang = false;
+
+        hangTile = 0;
     }
 }

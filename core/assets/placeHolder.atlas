@@ -4,20 +4,76 @@ size: 2048,64
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-adventurer-fall
+adventurer-crnr-grb
   rotate: false
-  xy: 1132, 5
+  xy: 1496, 5
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 0
-adventurer-fall
+adventurer-crnr-grb
   rotate: false
-  xy: 1184, 5
+  xy: 1548, 5
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 1
+adventurer-crnr-grb
+  rotate: false
+  xy: 1600, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 2
+adventurer-crnr-grb
+  rotate: false
+  xy: 1652, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 3
+adventurer-crouch
+  rotate: false
+  xy: 1288, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 3
+adventurer-crouch
+  rotate: false
+  xy: 1340, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
+adventurer-crouch
+  rotate: false
+  xy: 1392, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 1
+adventurer-crouch
+  rotate: false
+  xy: 1444, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 2
+adventurer-fall
+  rotate: false
+  xy: 872, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 1
+adventurer-fall
+  rotate: false
+  xy: 1236, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
 adventurer-idle
   rotate: false
   xy: 508, 5
@@ -48,21 +104,21 @@ adventurer-jump
   index: 1
 adventurer-jump
   rotate: false
-  xy: 872, 5
+  xy: 1028, 5
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 0
 adventurer-jump
   rotate: false
-  xy: 1028, 5
+  xy: 1132, 5
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 2
 adventurer-jump
   rotate: false
-  xy: 1080, 5
+  xy: 1184, 5
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
@@ -104,13 +160,6 @@ adventurer-run
   index: 5
 adventurer-run
   rotate: false
-  xy: 1236, 5
-  size: 50, 37
-  orig: 50, 37
-  offset: 0, 0
-  index: 0
-adventurer-wall-slide
-  rotate: false
   xy: 924, 5
   size: 50, 37
   orig: 50, 37
@@ -119,6 +168,13 @@ adventurer-wall-slide
 adventurer-wall-slide
   rotate: false
   xy: 976, 5
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
+adventurer-wall-slide
+  rotate: false
+  xy: 1080, 5
   size: 50, 37
   orig: 50, 37
   offset: 0, 0

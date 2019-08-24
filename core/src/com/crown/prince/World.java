@@ -146,6 +146,8 @@ public class World {
         animation.animations.put(PlayerComponent.JUMP, assets.adventurerJump);
         animation.animations.put(PlayerComponent.FALL, assets.adventurerFall);
         animation.animations.put(PlayerComponent.SLIDE,assets.adventurerWallSlide);
+        animation.animations.put(PlayerComponent.CORNER_GRAB,assets.adventurerCornerGrab);
+        animation.animations.put(PlayerComponent.CROUCH,assets.adventurerCrouch);
         animation.state = PlayerComponent.IDLE;
 
         position.x = physics.oldX = x;
@@ -169,6 +171,7 @@ public class World {
         engine.addEntity(entity);
 
         engine.getSystem(PlayerSystem.class).setPlayer(entity);
+
         createCamera(entity);
     }
 
