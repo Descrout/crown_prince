@@ -21,6 +21,8 @@ public class PlayerComponent implements Component, Pool.Poolable {
     public boolean facingRight = true;
     public boolean willHang = false;
 
+    public int jumpTimer = 0;
+
     public int hangTile = 0;
 
     @Override
@@ -35,5 +37,6 @@ public class PlayerComponent implements Component, Pool.Poolable {
         willHang = false;
 
         hangTile = 0;
+        jumpTimer = 0;
     }
 }

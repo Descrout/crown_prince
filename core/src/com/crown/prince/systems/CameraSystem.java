@@ -32,8 +32,8 @@ public class CameraSystem extends IteratingSystem {
             cam.camera.position.x = target.x;
             cam.camera.position.y = target.y;
         }else{
-            cam.camera.position.x += (target.x-cam.camera.position.x)*cam.lerp;
-            cam.camera.position.y += (target.y-cam.camera.position.y)*cam.lerp;
+            cam.camera.position.x += ((target.x-cam.camera.position.x)*cam.lerp);
+            cam.camera.position.y += ((target.y-cam.camera.position.y)*cam.lerp);
         }
         /*
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) cam.camera.translate(-10,0);

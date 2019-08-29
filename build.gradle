@@ -1,6 +1,4 @@
 buildscript {
-    
-
     repositories {
         mavenLocal()
         mavenCentral()
@@ -20,6 +18,7 @@ allprojects {
     apply plugin: "idea"
 
     version = '1.0'
+
     ext {
         appName = "ProjectCrownPrince"
         gdxVersion = '1.9.9'

@@ -1,5 +1,6 @@
 package com.crown.prince.systems;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.Gdx;
@@ -19,6 +20,8 @@ public class PlayerSystem extends EntitySystem {
     LightComponent light;
     PositionComponent pos;
 
+    CollisionSystem collisionSystem;
+
     FSM brain;
 
     public PlayerSystem() {
@@ -26,37 +29,60 @@ public class PlayerSystem extends EntitySystem {
         setProcessing(false);
     }
 
+    @Override
+    public void addedToEngine(Engine engine) {
+        collisionSystem = engine.getSystem(CollisionSystem.class);
+    }
+
     private void normalState() {
+        canJumpController();
         playerControl();
         animControl();
     }
 
     private void slideState() {
         anim.state = PlayerComponent.SLIDE;
-        if(playerComponent.canJump){
+
+        physics.accX += (playerComponent.facingRight ? 20f : -20f);
+
+        if (Calculation.isTouching(collide.touching, Touch.FLOOR)) {
             brain.currentState = this::normalState;
             return;
         }
-        if(!playerComponent.keyDown) physics.velY *= 0.6;
+        if (!playerComponent.keyDown) physics.velY *= 0.6;
 
         if (playerComponent.keyUp) {
             physics.velY = Constants.playerJump;
-            physics.accX += (playerComponent.facingRight ? -550f : 550f);
+            physics.accX += (playerComponent.facingRight ? -650f : 650f);
             brain.currentState = this::normalState;
             return;
         }
 
-        if(playerComponent.facingRight){
-            if(playerComponent.keyLeft) brain.currentState = this::normalState;
-        }else if (playerComponent.keyRight) brain.currentState = this::normalState;
+        if (playerComponent.hangTile != 1) {
+            brain.currentState = this::normalState;
+            return;
+        }
 
+        if (playerComponent.facingRight) {
+            if (playerComponent.keyLeft) brain.currentState = this::normalState;
+        } else if (playerComponent.keyRight) brain.currentState = this::normalState;
+
+
+    }
+
+    private void crouchState() {
+        anim.state = PlayerComponent.CROUCH;
+
+        if (!playerComponent.keyDown) {
+            brain.currentState = this::normalState;
+        }
     }
 
     private void hangState() {
         anim.state = PlayerComponent.CORNER_GRAB;
         pos.y = physics.oldY;
         physics.velY = 0;
-        if (playerComponent.keyDown){
+        if (playerComponent.keyDown) {
             brain.currentState = this::normalState;
             return;
         }
@@ -66,23 +92,38 @@ public class PlayerSystem extends EntitySystem {
             return;
         }
 
-        if(playerComponent.facingRight){
-            if(playerComponent.keyLeft) brain.currentState = this::normalState;
-        }else if (playerComponent.keyRight) brain.currentState = this::normalState;
+        if (playerComponent.facingRight) {
+            if (playerComponent.keyLeft) brain.currentState = this::normalState;
+        } else if (playerComponent.keyRight) brain.currentState = this::normalState;
     }
 
     private void playerControl() {
         if (playerComponent.keyRight) {
             playerComponent.facingRight = true;
+            physics.controlled = true;
             physics.accX += Constants.playerSpeed;
         }
         if (playerComponent.keyLeft) {
             playerComponent.facingRight = false;
+            physics.controlled = true;
             physics.accX -= Constants.playerSpeed;
         }
         if (playerComponent.keyUp && playerComponent.canJump) {
             physics.accY += Constants.playerJump;
             anim.time = 0f;
+            playerComponent.canJump = false;
+        }
+
+        if (!playerComponent.keyUp && physics.velY > 0) physics.velY *= 0.8;
+
+        if (playerComponent.keyDown && playerComponent.canJump) {
+            if(physics.onPlatform){
+                pos.y -= 2;
+                playerComponent.canJump = false;
+            }else{
+                brain.currentState = this::crouchState;
+                return;
+            }
         }
 
         slideHangControl();
@@ -91,17 +132,17 @@ public class PlayerSystem extends EntitySystem {
     private void slideHangControl() {
         if (physics.velY < 0) {
             boolean right = Calculation.isTouching(collide.touching, Touch.RIGHT_SIDE);
-            boolean left =  Calculation.isTouching(collide.touching, Touch.LEFT_SIDE);
+            boolean left = Calculation.isTouching(collide.touching, Touch.LEFT_SIDE);
             if (right) {
                 if (playerComponent.hangTile == 1) {
                     if (playerComponent.willHang) {
                         playerComponent.willHang = false;
                         brain.currentState = this::hangState;
-                    } else{
-                        if(playerComponent.keyRight) brain.currentState = this::slideState;
+                    } else {
+                        if (playerComponent.keyRight) brain.currentState = this::slideState;
                     }
                 } else {
-                    if(playerComponent.keyRight)playerComponent.willHang = true;
+                    if (playerComponent.keyRight) playerComponent.willHang = true;
                     else playerComponent.willHang = false;
                 }
             }
@@ -111,11 +152,11 @@ public class PlayerSystem extends EntitySystem {
                     if (playerComponent.willHang) {
                         playerComponent.willHang = false;
                         brain.currentState = this::hangState;
-                    } else{
-                        if(playerComponent.keyLeft) brain.currentState = this::slideState;
+                    } else {
+                        if (playerComponent.keyLeft) brain.currentState = this::slideState;
                     }
                 } else {
-                    if(playerComponent.keyLeft)playerComponent.willHang = true;
+                    if (playerComponent.keyLeft) playerComponent.willHang = true;
                     else playerComponent.willHang = false;
                 }
             }
@@ -124,28 +165,15 @@ public class PlayerSystem extends EntitySystem {
 
     private void keyRegister() {
         physics.controlled = playerComponent.keyDown = playerComponent.keyLeft = playerComponent.keyRight = playerComponent.keyUp = false;
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            playerComponent.keyLeft = true;
-            physics.controlled = true;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            playerComponent.keyRight = true;
-            physics.controlled = true;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            playerComponent.keyUp = true;
-            physics.controlled = true;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            playerComponent.keyDown = true;
-        }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) playerComponent.keyLeft = true;
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) playerComponent.keyRight = true;
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) playerComponent.keyUp = true;
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) playerComponent.keyDown = true;
     }
 
     private void animControl() {
         if (playerComponent.canJump) {
-            if(playerComponent.keyRight == playerComponent.keyLeft)anim.state = PlayerComponent.IDLE;
+            if (playerComponent.keyRight == playerComponent.keyLeft) anim.state = PlayerComponent.IDLE;
             else anim.state = PlayerComponent.RUN;
         } else {
             if (physics.velY < 0) anim.state = PlayerComponent.FALL;
@@ -164,8 +192,19 @@ public class PlayerSystem extends EntitySystem {
         scale.drawY = -3;
     }
 
-    public void intervalUpdate() {
-        playerComponent.canJump = Calculation.isTouching(collide.touching, Touch.FLOOR);
+    private void canJumpController() {
+        if (!Calculation.isTouching(collide.touching, Touch.FLOOR)) {
+            playerComponent.jumpTimer += 1;
+            if (playerComponent.jumpTimer >= 5) playerComponent.canJump = false;
+        } else {
+            playerComponent.canJump = true;
+            playerComponent.jumpTimer = 0;
+        }
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        playerComponent.hangTile = collisionSystem.getTileAt(collide.sideX, collisionSystem.getTileNum(physics.oldY + bounds.h + 1));
         keyRegister();
         brain.update();
         facingControl();

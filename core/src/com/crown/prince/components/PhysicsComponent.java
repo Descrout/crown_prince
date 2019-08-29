@@ -12,8 +12,9 @@ public class PhysicsComponent implements Component, Pool.Poolable {
     public float oldY = 0;
     public float friction = 0.7f; // default for all
     public float gravity = 20f; // default for all
-    public int maxVelY = 440; // default for all
+    public int maxVelY = 600; // default for all
     public boolean controlled = false;
+    public boolean onPlatform = false;
 
     @Override
     public void reset() {
@@ -25,7 +26,8 @@ public class PhysicsComponent implements Component, Pool.Poolable {
         oldY = 0;
         friction = 0.7f;
         gravity = 20f;
-        maxVelY = 440;
+        maxVelY = 600;
         controlled = false;
+        onPlatform = false;
     }
 }

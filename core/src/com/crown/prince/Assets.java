@@ -22,6 +22,8 @@ public class Assets {
 
 
     public TextureRegion tiles;
+    public TextureRegion platform;
+    public TextureRegion spike;
 
     public Assets(){
         manager = new AssetManager();
@@ -43,6 +45,8 @@ public class Assets {
         adventurerCrouch = new Animation(0.12F, atlas.findRegions("adventurer-crouch"), Animation.PlayMode.LOOP);
 
         tiles = atlas.findRegion("tileset");
+        platform = atlas.findRegion("platform");
+        spike = atlas.findRegion("spikes");
     }
 
     public void loadAllAtOnce(){

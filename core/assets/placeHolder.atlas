@@ -1,188 +1,405 @@
 
 placeHolder.png
-size: 2048,64
+size: 2048,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-adventurer-crnr-grb
+adventurer-air-attack
   rotate: false
-  xy: 1496, 5
+  xy: 638, 75
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 0
-adventurer-crnr-grb
+adventurer-air-attack
   rotate: false
-  xy: 1548, 5
+  xy: 690, 75
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 1
-adventurer-crnr-grb
+adventurer-air-attack
   rotate: false
-  xy: 1600, 5
+  xy: 742, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 2
+adventurer-air-attack
+  rotate: false
+  xy: 794, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 3
+adventurer-attack1
+  rotate: false
+  xy: 950, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
+adventurer-attack1
+  rotate: false
+  xy: 1106, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 3
+adventurer-attack1
+  rotate: false
+  xy: 1158, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 4
+adventurer-attack1
+  rotate: false
+  xy: 1678, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 2
+adventurer-attack1
+  rotate: false
+  xy: 1782, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 1
+adventurer-attack2
+  rotate: false
+  xy: 1002, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 4
+adventurer-attack2
+  rotate: false
+  xy: 1730, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 3
+adventurer-attack2
+  rotate: false
+  xy: 1834, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 1
+adventurer-attack2
+  rotate: false
+  xy: 418, 36
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
+adventurer-attack2
+  rotate: false
+  xy: 522, 36
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 2
+adventurer-attack2
+  rotate: false
+  xy: 574, 36
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 5
+adventurer-attack3
+  rotate: false
+  xy: 1054, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
+adventurer-attack3
+  rotate: false
+  xy: 1210, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 3
+adventurer-attack3
+  rotate: false
+  xy: 1262, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 4
+adventurer-attack3
+  rotate: false
+  xy: 1314, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 5
+adventurer-attack3
+  rotate: false
+  xy: 314, 36
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 1
+adventurer-attack3
+  rotate: false
+  xy: 834, 36
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 2
 adventurer-crnr-grb
   rotate: false
-  xy: 1652, 5
+  xy: 1470, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
+adventurer-crnr-grb
+  rotate: false
+  xy: 1522, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 1
+adventurer-crnr-grb
+  rotate: false
+  xy: 1574, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 2
+adventurer-crnr-grb
+  rotate: false
+  xy: 1626, 75
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 3
 adventurer-crouch
   rotate: false
-  xy: 1288, 5
-  size: 50, 37
-  orig: 50, 37
-  offset: 0, 0
-  index: 3
-adventurer-crouch
-  rotate: false
-  xy: 1340, 5
+  xy: 626, 36
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 0
 adventurer-crouch
   rotate: false
-  xy: 1392, 5
+  xy: 678, 36
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 1
 adventurer-crouch
   rotate: false
-  xy: 1444, 5
+  xy: 730, 36
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 2
+adventurer-crouch
+  rotate: false
+  xy: 782, 36
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 3
+adventurer-die
+  rotate: false
+  xy: 2, 7
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
+adventurer-die
+  rotate: false
+  xy: 54, 7
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 1
+adventurer-die
+  rotate: false
+  xy: 132, 41
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 2
+adventurer-die
+  rotate: false
+  xy: 184, 41
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 3
+adventurer-die
+  rotate: false
+  xy: 236, 41
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 4
+adventurer-die
+  rotate: false
+  xy: 236, 41
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 6
+adventurer-die
+  rotate: false
+  xy: 326, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 5
 adventurer-fall
   rotate: false
-  xy: 872, 5
+  xy: 1366, 75
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
-  index: 1
+  index: 0
 adventurer-fall
   rotate: false
-  xy: 1236, 5
-  size: 50, 37
-  orig: 50, 37
-  offset: 0, 0
-  index: 0
-adventurer-idle
-  rotate: false
-  xy: 508, 5
-  size: 50, 37
-  orig: 50, 37
-  offset: 0, 0
-  index: 0
-adventurer-idle
-  rotate: false
-  xy: 560, 5
+  xy: 1418, 75
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 1
 adventurer-idle
   rotate: false
-  xy: 612, 5
+  xy: 430, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 3
+adventurer-idle
+  rotate: false
+  xy: 1886, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
+adventurer-idle
+  rotate: false
+  xy: 366, 36
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 2
-adventurer-jump
+adventurer-idle
   rotate: false
-  xy: 456, 5
+  xy: 470, 36
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 1
 adventurer-jump
   rotate: false
-  xy: 1028, 5
+  xy: 378, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 3
+adventurer-jump
+  rotate: false
+  xy: 586, 75
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 0
 adventurer-jump
   rotate: false
-  xy: 1132, 5
+  xy: 846, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 1
+adventurer-jump
+  rotate: false
+  xy: 898, 75
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 2
-adventurer-jump
+adventurer-run
   rotate: false
-  xy: 1184, 5
+  xy: 1938, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 0
+adventurer-run
+  rotate: false
+  xy: 1990, 75
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 1
+adventurer-run
+  rotate: false
+  xy: 106, 2
+  size: 50, 37
+  orig: 50, 37
+  offset: 0, 0
+  index: 2
+adventurer-run
+  rotate: false
+  xy: 158, 2
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 3
 adventurer-run
   rotate: false
-  xy: 404, 5
-  size: 50, 37
-  orig: 50, 37
-  offset: 0, 0
-  index: 1
-adventurer-run
-  rotate: false
-  xy: 664, 5
-  size: 50, 37
-  orig: 50, 37
-  offset: 0, 0
-  index: 2
-adventurer-run
-  rotate: false
-  xy: 716, 5
-  size: 50, 37
-  orig: 50, 37
-  offset: 0, 0
-  index: 3
-adventurer-run
-  rotate: false
-  xy: 768, 5
+  xy: 210, 2
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 4
 adventurer-run
   rotate: false
-  xy: 820, 5
+  xy: 262, 2
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 5
-adventurer-run
+adventurer-wall-slide
   rotate: false
-  xy: 924, 5
+  xy: 482, 75
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 0
 adventurer-wall-slide
   rotate: false
-  xy: 976, 5
-  size: 50, 37
-  orig: 50, 37
-  offset: 0, 0
-  index: 0
-adventurer-wall-slide
-  rotate: false
-  xy: 1080, 5
+  xy: 534, 75
   size: 50, 37
   orig: 50, 37
   offset: 0, 0
   index: 1
+platform
+  rotate: false
+  xy: 228, 80
+  size: 96, 32
+  orig: 96, 32
+  offset: 0, 0
+  index: -1
+spikes
+  rotate: false
+  xy: 2, 46
+  size: 128, 32
+  orig: 128, 32
+  offset: 0, 0
+  index: -1
 tileset
   rotate: false
-  xy: 2, 2
-  size: 400, 40
-  orig: 400, 40
+  xy: 2, 80
+  size: 224, 32
+  orig: 224, 32
   offset: 0, 0
   index: -1

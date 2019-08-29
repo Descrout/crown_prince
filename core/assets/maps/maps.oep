@@ -29,8 +29,8 @@
     <LayerDefinition xsi:type="TileLayerDefinition">
       <Name>background</Name>
       <Grid>
-        <Width>40</Width>
-        <Height>40</Height>
+        <Width>32</Width>
+        <Height>32</Height>
       </Grid>
       <ScrollFactor>
         <X>1</X>
@@ -41,8 +41,8 @@
     <LayerDefinition xsi:type="TileLayerDefinition">
       <Name>tiles</Name>
       <Grid>
-        <Width>40</Width>
-        <Height>40</Height>
+        <Width>32</Width>
+        <Height>32</Height>
       </Grid>
       <ScrollFactor>
         <X>1</X>
@@ -53,8 +53,8 @@
     <LayerDefinition xsi:type="EntityLayerDefinition">
       <Name>objects</Name>
       <Grid>
-        <Width>40</Width>
-        <Height>40</Height>
+        <Width>32</Width>
+        <Height>32</Height>
       </Grid>
       <ScrollFactor>
         <X>1</X>
@@ -64,8 +64,8 @@
     <LayerDefinition xsi:type="TileLayerDefinition">
       <Name>foreground</Name>
       <Grid>
-        <Width>40</Width>
-        <Height>40</Height>
+        <Width>32</Width>
+        <Height>32</Height>
       </Grid>
       <ScrollFactor>
         <X>1</X>
@@ -76,8 +76,8 @@
     <LayerDefinition xsi:type="GridLayerDefinition">
       <Name>collision</Name>
       <Grid>
-        <Width>40</Width>
-        <Height>40</Height>
+        <Width>32</Width>
+        <Height>32</Height>
       </Grid>
       <ScrollFactor>
         <X>1</X>
@@ -92,8 +92,8 @@
       <Name>tileset</Name>
       <FilePath>tileset.png</FilePath>
       <TileSize>
-        <Width>40</Width>
-        <Height>40</Height>
+        <Width>32</Width>
+        <Height>32</Height>
       </TileSize>
       <TileSep>0</TileSep>
     </Tileset>
@@ -101,23 +101,23 @@
   <EntityDefinitions>
     <EntityDefinition Name="player" Limit="-1" ResizableX="false" ResizableY="false" Rotatable="false" RotateIncrement="15">
       <Size>
-        <Width>40</Width>
-        <Height>40</Height>
+        <Width>32</Width>
+        <Height>32</Height>
       </Size>
       <Origin>
         <X>0</X>
         <Y>0</Y>
       </Origin>
-      <ImageDefinition DrawMode="Image" ImagePath="adventurer-idle-00.png" Tiled="false">
-        <RectColor A="255" R="255" G="0" B="0" />
+      <ImageDefinition DrawMode="Rectangle" ImagePath="adventurer-idle-00.png" Tiled="false">
+        <RectColor A="255" R="64" G="0" B="128" />
       </ImageDefinition>
       <ValueDefinitions />
       <NodesDefinition Enabled="false" Limit="-1" DrawMode="None" Ghost="false" />
     </EntityDefinition>
     <EntityDefinition Name="platform" Limit="-1" ResizableX="true" ResizableY="true" Rotatable="false" RotateIncrement="15">
       <Size>
-        <Width>40</Width>
-        <Height>40</Height>
+        <Width>32</Width>
+        <Height>32</Height>
       </Size>
       <Origin>
         <X>0</X>

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.crown.prince.components.*;
+import com.crown.prince.systems.CollisionSystem;
 import com.crown.prince.systems.PhysicsSystem;
 import com.crown.prince.systems.PlayerSystem;
 import com.crown.prince.systems.RenderSystem;
@@ -44,7 +45,7 @@ public class World {
         mapLoader.load(name);
 
         engine.getSystem(RenderSystem.class).setTileMap(map);
-        engine.getSystem(PhysicsSystem.class).grid = mapLoader.createCollisionGrid("collision");
+        engine.getSystem(CollisionSystem.class).grid = mapLoader.createCollisionGrid("collision");
 
     }
 
@@ -60,7 +61,7 @@ public class World {
         engine.addEntity(entity);
     }
 
-    public void createPlatform(int x,int y,int w,int h,int velX,int velY,int changeX,int changeY,int allowCollision){
+    public void createPlatform(int x,int y,int w,int h,int velX,int velY,int changeX,int changeY){
         Entity entity = engine.createEntity();
 
         PositionComponent position = engine.createComponent(PositionComponent.class);
@@ -82,10 +83,9 @@ public class World {
 
         mover.changeX = changeX;
         mover.changeY = changeY;
-        collider.allowCollision = allowCollision;
 
-        texture.region = new TextureRegion(assets.tiles);
-        texture.region.setRegion((40*7)+5,0,35,40);
+        texture.region = new TextureRegion(assets.platform);
+        //texture.region.setRegion(0,0,32,32);
 
         scale.drawWidth = w;
         scale.drawHeight = h;
@@ -153,7 +153,7 @@ public class World {
         position.x = physics.oldX = x;
         position.y = physics.oldY = y;
 
-        physics.friction = 0.9f;
+        physics.friction = 0.8f;
 
         light.set(new Vector3(1f,1f,1f),70f,true);
 

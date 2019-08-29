@@ -61,13 +61,8 @@ public class MapLoader {
             int changeX = collider.getIntAttribute("changeX");
             int changeY = collider.getIntAttribute("changeY");
 
-            int allowCollision = 0;
-            if (collider.getBoolean("left")) allowCollision |= Touch.LEFT_SIDE;
-            if (collider.getBoolean("right")) allowCollision |= Touch.RIGHT_SIDE;
-            if (collider.getBoolean("up")) allowCollision |= Touch.CEILING;
-            if (collider.getBoolean("down")) allowCollision |= Touch.FLOOR;
 
-            world.createPlatform(x,y,w,h,velX,velY,changeX,changeY,allowCollision);
+            world.createPlatform(x,y,w,h,velX,velY,changeX,changeY);
         }
     }
 
