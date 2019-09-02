@@ -5,7 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.crown.prince.Calculation;
+import com.crown.prince.Utils;
 import com.crown.prince.Mappers;
 import com.crown.prince.Touch;
 import com.crown.prince.World;
@@ -86,7 +86,7 @@ public class CollisionSystem extends IteratingSystem {
             PositionComponent cPos = Mappers.position.get(collider);
             BoundsComponent cBounds = Mappers.bounds.get(collider);
 
-            if (!Calculation.overlaps(pos, bounds, cPos, cBounds)) continue;
+            if (!Utils.overlaps(pos, bounds, cPos, cBounds)) continue;
 
             PhysicsComponent cPhysics = Mappers.physics.get(collider);
 

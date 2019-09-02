@@ -10,6 +10,8 @@ import com.crown.prince.components.*;
 
 public class PlayerSystem extends EntitySystem {
     Entity player;
+    Entity damage;
+    private Engine engine;
 
     AnimationComponent anim;
     PhysicsComponent physics;
@@ -31,6 +33,7 @@ public class PlayerSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
+        this.engine = engine;
         collisionSystem = engine.getSystem(CollisionSystem.class);
     }
 
@@ -45,7 +48,7 @@ public class PlayerSystem extends EntitySystem {
 
         physics.accX += (playerComponent.facingRight ? 20f : -20f);
 
-        if (Calculation.isTouching(collide.touching, Touch.FLOOR)) {
+        if (Utils.isTouching(collide.touching, Touch.FLOOR)) {
             brain.currentState = this::normalState;
             return;
         }
@@ -74,6 +77,7 @@ public class PlayerSystem extends EntitySystem {
         anim.state = PlayerComponent.CROUCH;
 
         if (!playerComponent.keyDown) {
+            bounds.h = Constants.playerBoundH;
             brain.currentState = this::normalState;
         }
     }
@@ -122,6 +126,7 @@ public class PlayerSystem extends EntitySystem {
                 playerComponent.canJump = false;
             }else{
                 brain.currentState = this::crouchState;
+                bounds.h = Constants.playerCrouchH;
                 return;
             }
         }
@@ -131,8 +136,8 @@ public class PlayerSystem extends EntitySystem {
 
     private void slideHangControl() {
         if (physics.velY < 0) {
-            boolean right = Calculation.isTouching(collide.touching, Touch.RIGHT_SIDE);
-            boolean left = Calculation.isTouching(collide.touching, Touch.LEFT_SIDE);
+            boolean right = Utils.isTouching(collide.touching, Touch.RIGHT_SIDE);
+            boolean left = Utils.isTouching(collide.touching, Touch.LEFT_SIDE);
             if (right) {
                 if (playerComponent.hangTile == 1) {
                     if (playerComponent.willHang) {
@@ -193,7 +198,7 @@ public class PlayerSystem extends EntitySystem {
     }
 
     private void canJumpController() {
-        if (!Calculation.isTouching(collide.touching, Touch.FLOOR)) {
+        if (!Utils.isTouching(collide.touching, Touch.FLOOR)) {
             playerComponent.jumpTimer += 1;
             if (playerComponent.jumpTimer >= 5) playerComponent.canJump = false;
         } else {

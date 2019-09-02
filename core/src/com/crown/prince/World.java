@@ -119,6 +119,7 @@ public class World {
         engine.addEntity(entity);
     }
 
+
     public void createPlayer(float x, float y){
         Entity entity = engine.createEntity();
 
@@ -137,7 +138,7 @@ public class World {
         scale.drawWidth = assets.adventurerIdling.getKeyFrame(0f).getRegionWidth() +20;
         scale.drawHeight = assets.adventurerIdling.getKeyFrame(0f).getRegionHeight() +20;
 
-        bounds.setBounds(26,39);
+        bounds.setBounds(Constants.playerBoundW,Constants.playerBoundH);
 
         collide.init(bounds.w, bounds.h);
 

@@ -3,7 +3,7 @@ package com.crown.prince;
 import com.crown.prince.components.BoundsComponent;
 import com.crown.prince.components.PositionComponent;
 
-public class Calculation {
+public class Utils {
     public static boolean isTouching(int touching, int side) {
         return (touching & side) == side;
     }
