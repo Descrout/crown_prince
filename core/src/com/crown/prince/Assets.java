@@ -18,7 +18,10 @@ public class Assets {
     public Animation<TextureRegion> adventurerWallSlide;
     public Animation<TextureRegion> adventurerCornerGrab;
     public Animation<TextureRegion> adventurerCrouch;
-
+    public Animation<TextureRegion> adventurerDie;
+    public Animation<TextureRegion> adventurerAttack1;
+    public Animation<TextureRegion> adventurerAttack2;
+    public Animation<TextureRegion> adventurerAttack3;
 
 
     public TextureRegion tiles;
@@ -36,6 +39,7 @@ public class Assets {
 
     private void getAssets(){
         atlas = manager.get("placeHolder.atlas",TextureAtlas.class);
+
         adventurerIdling = new Animation(0.20f, atlas.findRegions("adventurer-idle"), Animation.PlayMode.LOOP);
         adventurerRun = new Animation(0.12F, atlas.findRegions("adventurer-run"), Animation.PlayMode.LOOP);
         adventurerJump = new Animation(0.12F, atlas.findRegions("adventurer-jump"), Animation.PlayMode.NORMAL);
@@ -43,6 +47,11 @@ public class Assets {
         adventurerWallSlide = new Animation(0.20F, atlas.findRegions("adventurer-wall-slide"), Animation.PlayMode.LOOP);
         adventurerCornerGrab = new Animation(0.14F, atlas.findRegions("adventurer-crnr-grb"), Animation.PlayMode.LOOP);
         adventurerCrouch = new Animation(0.12F, atlas.findRegions("adventurer-crouch"), Animation.PlayMode.LOOP);
+        adventurerDie = new Animation(0.12F, atlas.findRegions("adventurer-die"), Animation.PlayMode.NORMAL);
+        adventurerAttack1 = new Animation(0.08F, atlas.findRegions("adventurer-attack1"), Animation.PlayMode.NORMAL);
+        adventurerAttack2 = new Animation(0.08F, atlas.findRegions("adventurer-attack2"), Animation.PlayMode.NORMAL);
+        adventurerAttack3 = new Animation(0.08F, atlas.findRegions("adventurer-attack3"), Animation.PlayMode.NORMAL);
+
 
         tiles = atlas.findRegion("tileset");
         platform = atlas.findRegion("platform");

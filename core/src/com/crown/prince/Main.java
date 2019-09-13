@@ -15,7 +15,7 @@ public class Main extends Game {
 	public SpriteBatch batch;
 	public ShapeRenderer shapeRenderer;
 
-	public OrthographicCamera cam;
+	public CameraManager cameraManager;
 	private Viewport viewport;
 
 	public Assets assets;
@@ -25,13 +25,13 @@ public class Main extends Game {
 		batch = new SpriteBatch();
 		shapeRenderer = new ShapeRenderer();
 
-		cam = new OrthographicCamera();
+		cameraManager = new CameraManager();
 
-		viewport = new FitViewport(Constants.ScreenW, Constants.ScreenH, cam);
+		viewport = new FitViewport(Constants.ScreenW, Constants.ScreenH, cameraManager.getCamera());
 		viewport.apply();
 
-		cam.position.set(Constants.ScreenW / 2f , Constants.ScreenH / 2f, 0);
-		cam.update();
+		cameraManager.getCamera().position.set(Constants.ScreenW / 2f , Constants.ScreenH / 2f, 0);
+		cameraManager.getCamera().update();
 
 		assets = new Assets();
 		assets.loadAllAtOnce();

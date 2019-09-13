@@ -10,6 +10,7 @@ public class HealthComponent implements Component, Pool.Poolable {
     public int knockbackResX = 1;
     public int knockbackResY = 1;
     public int id = 0;
+    public boolean canDamaged = true;
 
     public HealthListener healthListener = null;
 
@@ -21,5 +22,6 @@ public class HealthComponent implements Component, Pool.Poolable {
         healthListener = null;
         knockbackResX = 1;
         knockbackResY = 1;
+        canDamaged = true;
     }
 }

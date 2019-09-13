@@ -3,6 +3,7 @@ package com.crown.prince.systems;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.crown.prince.*;
@@ -11,7 +12,7 @@ import com.crown.prince.components.*;
 public class PlayerSystem extends EntitySystem {
     Entity player;
     Entity damage;
-    private Engine engine;
+    private PooledEngine engine;
 
     AnimationComponent anim;
     PhysicsComponent physics;
@@ -33,14 +34,23 @@ public class PlayerSystem extends EntitySystem {
 
     @Override
     public void addedToEngine(Engine engine) {
-        this.engine = engine;
+        this.engine = (PooledEngine) engine;
         collisionSystem = engine.getSystem(CollisionSystem.class);
     }
 
     private void normalState() {
         canJumpController();
         playerControl();
+        rangedAttackController();
         animControl();
+    }
+
+    private void rangedAttackController() {
+        playerComponent.rangedTimer += FixedUpdate.Fixed_Timestep;
+        if (playerComponent.rangedTimer >= playerComponent.rangedAttackSpeed && playerComponent.keyAttackRanged) {
+            createRangedAttack();
+            playerComponent.rangedTimer = 0;
+        }
     }
 
     private void slideState() {
@@ -56,7 +66,7 @@ public class PlayerSystem extends EntitySystem {
 
         if (playerComponent.keyUp) {
             physics.velY = Constants.playerJump;
-            physics.accX += (playerComponent.facingRight ? -650f : 650f);
+            physics.accX += (playerComponent.facingRight ? -750f : 750f);
             brain.currentState = this::normalState;
             return;
         }
@@ -67,8 +77,14 @@ public class PlayerSystem extends EntitySystem {
         }
 
         if (playerComponent.facingRight) {
-            if (playerComponent.keyLeft) brain.currentState = this::normalState;
-        } else if (playerComponent.keyRight) brain.currentState = this::normalState;
+            if (playerComponent.keyLeft) {
+                brain.currentState = this::normalState;
+                physics.accX -= 100f;
+            }
+        } else if (playerComponent.keyRight) {
+            brain.currentState = this::normalState;
+            physics.accX += 100f;
+        }
 
 
     }
@@ -79,6 +95,15 @@ public class PlayerSystem extends EntitySystem {
         if (!playerComponent.keyDown) {
             bounds.h = Constants.playerBoundH;
             brain.currentState = this::normalState;
+            return;
+        }
+
+        rangedAttackController();
+
+        if (playerComponent.keyAttackLight) {
+            anim.time = 0f;
+            playerComponent.timer = 0f;
+            brain.currentState = this::crouchAttackPrepare;
         }
     }
 
@@ -101,6 +126,174 @@ public class PlayerSystem extends EntitySystem {
         } else if (playerComponent.keyRight) brain.currentState = this::normalState;
     }
 
+    private void lightAttackPrepare() {
+        if (playerComponent.combo == 1) {
+            anim.state = PlayerComponent.ATTACK1;
+        } else if (playerComponent.combo == 2) {
+            anim.state = PlayerComponent.ATTACK2;
+        } else {
+            anim.state = PlayerComponent.ATTACK3;
+        }
+
+        playerComponent.timer += FixedUpdate.Fixed_Timestep;
+
+        if (anim.time > 0.1) anim.time = 0.1f;
+
+        if (playerComponent.timer > 0.3) {
+            createLightAttack();
+            playerComponent.combo++;
+            if (playerComponent.combo > 3) playerComponent.combo = 1;
+            physics.accX += (playerComponent.facingRight ? 120 : -120);
+            brain.currentState = this::lightAttackState;
+            return;
+        }
+    }
+
+    private void lightAttackState() {
+        PositionComponent posD = Mappers.position.get(damage);
+        posD.x = pos.x + (playerComponent.facingRight ? 16 : -20);
+        posD.y = pos.y + bounds.h - Constants.lightAttackH;
+
+
+        if (anim.animations.get(anim.state).isAnimationFinished(anim.time)) {
+            engine.removeEntity(damage);
+            brain.currentState = this::normalState;
+        }
+    }
+
+    private void crouchAttackPrepare() {
+        anim.state = PlayerComponent.ATTACK1;
+
+        playerComponent.timer += FixedUpdate.Fixed_Timestep;
+
+        if (anim.time > 0.1) anim.time = 0.1f;
+
+        if (playerComponent.timer > 0.3) {
+            createLightAttack();
+            brain.currentState = this::crouchAttackState;
+            return;
+        }
+    }
+
+
+    private void crouchAttackState() {
+        PositionComponent posD = Mappers.position.get(damage);
+        posD.x = pos.x + (playerComponent.facingRight ? 16 : -20);
+        posD.y = pos.y + bounds.h - Constants.lightAttackH;
+
+
+        if (anim.animations.get(anim.state).isAnimationFinished(anim.time)) {
+            brain.currentState = this::crouchState;
+            engine.removeEntity(damage);
+        }
+    }
+
+    private void jumpAttackState() {
+        anim.state = PlayerComponent.ATTACK1;
+
+        if (Utils.isTouching(collide.touching, Touch.FLOOR)) {
+            brain.currentState = this::normalState;
+            engine.removeEntity(damage);
+            return;
+        }
+        if (!playerComponent.keyUp && physics.velY > 0) physics.velY *= 0.8;
+
+
+        PositionComponent posD = Mappers.position.get(damage);
+        posD.x = pos.x + (playerComponent.facingRight ? 16 : -20);
+        posD.y = pos.y + bounds.h - Constants.lightAttackH;
+
+        if (playerComponent.facingRight) {
+            if (playerComponent.keyRight) {
+                physics.accX += Constants.playerSpeed;
+            }
+        } else {
+            if (playerComponent.keyLeft) {
+                physics.accX -= Constants.playerSpeed;
+            }
+        }
+
+
+        if (anim.animations.get(anim.state).isAnimationFinished(anim.time)) {
+            brain.currentState = this::normalState;
+            engine.removeEntity(damage);
+
+        }
+    }
+
+
+    private void createRangedAttack() {
+        Entity entity = engine.createEntity();
+
+        PositionComponent posD = engine.createComponent(PositionComponent.class);
+        BoundsComponent boundsD = engine.createComponent(BoundsComponent.class);
+        TextureComponent tex = engine.createComponent(TextureComponent.class);
+        DamageComponent damageComponent = engine.createComponent(DamageComponent.class);
+        ProjectileComponent projectileComponent = engine.createComponent(ProjectileComponent.class);
+        PhysicsComponent physicsD = engine.createComponent(PhysicsComponent.class);
+        CollideComponent collideD = engine.createComponent(CollideComponent.class);
+
+        physicsD.gravity = 14f;
+        physicsD.friction = 0.99f;
+        physicsD.velX = (playerComponent.facingRight ? 600 : -600);
+        physicsD.velY = 200f;
+
+        physicsD.elasticity = 0.7f;
+
+        damageComponent.id = 1;
+        damageComponent.knockbackX = 220;
+        damageComponent.knockbackY = 150;
+        damageComponent.facingRight = playerComponent.facingRight;
+        damageComponent.canDamage = true;
+
+        boundsD.setBounds(16, 16);
+
+        collideD.collideWithPlatform = false;
+        collideD.init(boundsD.w, boundsD.h);
+
+
+        posD.x = pos.x + (playerComponent.facingRight ? 16 : -20);
+        posD.y = pos.y + bounds.h - 16;
+
+        entity.add(posD);
+        entity.add(boundsD);
+        entity.add(damageComponent);
+        entity.add(tex);
+        entity.add(projectileComponent);
+        entity.add(collideD);
+        entity.add(physicsD);
+
+        engine.addEntity(entity);
+    }
+
+
+    private void createLightAttack() {
+        damage = engine.createEntity();
+
+        PositionComponent posD = engine.createComponent(PositionComponent.class);
+        BoundsComponent boundsD = engine.createComponent(BoundsComponent.class);
+        TextureComponent tex = engine.createComponent(TextureComponent.class);
+        DamageComponent damageComponent = engine.createComponent(DamageComponent.class);
+
+        damageComponent.id = 1;
+        damageComponent.knockbackX = 220;
+        damageComponent.knockbackY = 150;
+        damageComponent.facingRight = playerComponent.facingRight;
+        //damageComponent.canDamage = false;
+
+        boundsD.setBounds(Constants.lightAttackW, Constants.lightAttackH);
+
+        posD.x = pos.x + (playerComponent.facingRight ? 16 : -20);
+        posD.y = pos.y + bounds.h - Constants.lightAttackH;
+
+        damage.add(posD);
+        damage.add(boundsD);
+        damage.add(damageComponent);
+        damage.add(tex);
+
+        engine.addEntity(damage);
+    }
+
     private void playerControl() {
         if (playerComponent.keyRight) {
             playerComponent.facingRight = true;
@@ -118,13 +311,27 @@ public class PlayerSystem extends EntitySystem {
             playerComponent.canJump = false;
         }
 
+
+        if (playerComponent.keyAttackLight) {
+            anim.time = 0f;
+            playerComponent.timer = 0f;
+            if (playerComponent.canJump) {
+                brain.currentState = this::lightAttackPrepare;
+            } else {
+                createLightAttack();
+                playerComponent.timer = 0f;
+                brain.currentState = this::jumpAttackState;
+            }
+            return;
+        }
+
         if (!playerComponent.keyUp && physics.velY > 0) physics.velY *= 0.8;
 
         if (playerComponent.keyDown && playerComponent.canJump) {
-            if(physics.onPlatform){
+            if (physics.onPlatform) {
                 pos.y -= 2;
                 playerComponent.canJump = false;
-            }else{
+            } else {
                 brain.currentState = this::crouchState;
                 bounds.h = Constants.playerCrouchH;
                 return;
@@ -165,15 +372,19 @@ public class PlayerSystem extends EntitySystem {
                     else playerComponent.willHang = false;
                 }
             }
-        }
+        } else playerComponent.willHang = false;
+
     }
 
     private void keyRegister() {
-        physics.controlled = playerComponent.keyDown = playerComponent.keyLeft = playerComponent.keyRight = playerComponent.keyUp = false;
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) playerComponent.keyLeft = true;
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) playerComponent.keyRight = true;
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) playerComponent.keyUp = true;
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) playerComponent.keyDown = true;
+        physics.controlled = false;
+        playerComponent.keyLeft = Gdx.input.isKeyPressed(Input.Keys.LEFT);
+        playerComponent.keyRight = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+        playerComponent.keyUp = Gdx.input.isKeyPressed(Input.Keys.UP);
+        playerComponent.keyDown = Gdx.input.isKeyPressed(Input.Keys.DOWN);
+        playerComponent.keyAttackLight = Gdx.input.isKeyPressed(Input.Keys.A);
+        playerComponent.keyRoll = Gdx.input.isKeyPressed(Input.Keys.S);
+        playerComponent.keyAttackRanged = Gdx.input.isKeyPressed(Input.Keys.D);
     }
 
     private void animControl() {

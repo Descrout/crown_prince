@@ -2,6 +2,7 @@ package com.crown.prince.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Pool;
+import com.crown.prince.Constants;
 
 public class PhysicsComponent implements Component, Pool.Poolable {
     public float accX = 0;
@@ -10,9 +11,10 @@ public class PhysicsComponent implements Component, Pool.Poolable {
     public float velY = 0;
     public float oldX = 0;
     public float oldY = 0;
-    public float friction = 0.7f; // default for all
-    public float gravity = 20f; // default for all
-    public int maxVelY = 600; // default for all
+    public float elasticity = 0;
+    public float friction = Constants.globalFriction;
+    public float gravity = Constants.globalGravity;
+    public int maxVelY = Constants.globalMaxVelY;
     public boolean controlled = false;
     public boolean onPlatform = false;
 
@@ -24,9 +26,7 @@ public class PhysicsComponent implements Component, Pool.Poolable {
         velY = 0;
         oldX = 0;
         oldY = 0;
-        friction = 0.7f;
-        gravity = 20f;
-        maxVelY = 600;
+        elasticity = 0;
         controlled = false;
         onPlatform = false;
     }

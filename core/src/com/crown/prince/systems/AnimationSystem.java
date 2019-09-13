@@ -3,14 +3,12 @@ package com.crown.prince.systems;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.crown.prince.Mappers;
 import com.crown.prince.components.AnimationComponent;
 import com.crown.prince.components.TextureComponent;
 
 public class AnimationSystem extends IteratingSystem {
-    public AnimationSystem(){
+    public AnimationSystem() {
         super(Family.all(TextureComponent.class, AnimationComponent.class).get());
     }
 
@@ -19,12 +17,9 @@ public class AnimationSystem extends IteratingSystem {
         TextureComponent tex = Mappers.texture.get(entity);
         AnimationComponent anim = Mappers.anim.get(entity);
 
-        Animation<TextureRegion> animation = anim.animations.get(anim.state);
+        tex.region = anim.animations.get(anim.state).getKeyFrame(anim.time);
 
-        if(animation != null){
-            tex.region = animation.getKeyFrame(anim.time);
-        }
-
-        anim.time += deltaTime;
+        if (anim.play)
+            anim.time += deltaTime;
     }
 }

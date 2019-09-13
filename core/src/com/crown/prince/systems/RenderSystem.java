@@ -53,10 +53,16 @@ public class RenderSystem extends EntitySystem {
 
         for (int i = 0; i < entities.size(); ++i) {
             Entity entity = entities.get(i);
+            PositionComponent pos = Mappers.position.get(entity);
+
+            BoundsComponent bounds = Mappers.bounds.get(entity);
+            if(bounds!=null) {
+                shapeRenderer.setColor(1f, 1f, 1f, 1f);
+                shapeRenderer.rect(pos.x, pos.y, bounds.w, bounds.h);
+            }
 
             TextureComponent tex = Mappers.texture.get(entity);
             if (tex.region == null) continue;
-            PositionComponent pos = Mappers.position.get(entity);
 
             ScaleComponent scale = Mappers.scale.get(entity);
             if(scale==null)
@@ -67,10 +73,6 @@ public class RenderSystem extends EntitySystem {
                 batch.draw(tex.region, scale.x+scale.drawX, scale.y+scale.drawY,scale.drawWidth*scale.scaleX,scale.drawHeight*scale.scaleY);
             }
 
-            BoundsComponent bounds = Mappers.bounds.get(entity);
-            if(bounds==null) continue;
-            shapeRenderer.setColor(1f,1f,1f,1f);
-            shapeRenderer.rect(pos.x,pos.y,bounds.w,bounds.h);
         }
 
         renderFront();

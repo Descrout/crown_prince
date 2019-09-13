@@ -32,8 +32,7 @@ public class DamageSystem extends IteratingSystem {
             Entity hp = health.get(i);
 
             HealthComponent hpComponent = Mappers.health.get(hp);
-            if(hpComponent.id == damage.id) continue;
-            if(damage.damaged) continue;
+            if(hpComponent.id == damage.id || !hpComponent.canDamaged || !damage.canDamage || damage.damaged)  continue;
 
             PositionComponent pos2 = Mappers.position.get(hp);
             BoundsComponent bounds2 = Mappers.bounds.get(hp);
@@ -45,7 +44,7 @@ public class DamageSystem extends IteratingSystem {
                 if(Mappers.physics.has(hp)){
                     PhysicsComponent physics = Mappers.physics.get(hp);
                     physics.accY += damage.knockbackY/hpComponent.knockbackResY;
-                    physics.accX += (pos1.x+bounds1.w/2 > pos2.x+bounds2.w/2 ? -damage.knockbackX : damage.knockbackX)/hpComponent.knockbackResX;
+                    physics.accX += (damage.facingRight ? damage.knockbackX : -damage.knockbackX)/hpComponent.knockbackResX;
                 }
 
                 damage.damaged = true;

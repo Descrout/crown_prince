@@ -9,7 +9,8 @@ public class DamageComponent implements Component, Pool.Poolable {
     public int knockbackY = 0;
     public int id = 0;
     public boolean damaged = false;
-
+    public boolean canDamage = true;
+    public boolean facingRight = true;
 
     @Override
     public void reset() {
@@ -18,5 +19,6 @@ public class DamageComponent implements Component, Pool.Poolable {
         knockbackX = 0;
         knockbackY = 0;
         damaged = false;
+        canDamage = true;
     }
 }

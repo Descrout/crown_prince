@@ -54,7 +54,7 @@ public class CollisionSystem extends IteratingSystem {
                     pos.y = pos.y - ((pos.y + bounds.h) % TILE_SIZE) - 0.1f;
                     collide.touching |= Touch.CEILING;
                 }
-                physics.velY = 0;
+                physics.velY = physics.velY * physics.elasticity * -1;
                 break;
             }
             //else
@@ -74,11 +74,12 @@ public class CollisionSystem extends IteratingSystem {
                     pos.x = pos.x - (pos.x % TILE_SIZE) + TILE_SIZE + 0.1f;
                     collide.touching |= Touch.LEFT_SIDE;
                 }
-                physics.velX = 0;
+                physics.velX = physics.velX * physics.elasticity * -1;
                 break;
             }
         }
 
+        if (!collide.collideWithPlatform) return;
         physics.onPlatform = false;
 
         for (int i = 0; i < colliders.size(); ++i) {
@@ -98,6 +99,7 @@ public class CollisionSystem extends IteratingSystem {
                 physics.onPlatform = true;
             }
         }
+
     }
 
     public int getTileNum(float xy) {

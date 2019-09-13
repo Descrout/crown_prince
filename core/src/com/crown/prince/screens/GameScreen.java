@@ -1,33 +1,33 @@
 package com.crown.prince.screens;
 
 import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.math.Vector2;
+import com.crown.prince.CameraManager;
 import com.crown.prince.Main;
 import com.crown.prince.World;
-import com.crown.prince.components.LightComponent;
 import com.crown.prince.systems.*;
 
 public class GameScreen implements com.badlogic.gdx.Screen {
-    private Main game;
+    private CameraManager cameraManager;
     private World world;
     PooledEngine engine;
 
     public GameScreen(Main game){
-        this.game = game;
+        this.cameraManager = game.cameraManager;
 
         engine = new PooledEngine();
 
-        world = new World(engine,game.cam,game.assets);
+        world = new World(engine,cameraManager,game.assets);
 
         FixedUpdate fixed = new FixedUpdate();
 
-        engine.addSystem(new RenderSystem(game.batch,game.cam,game.shapeRenderer));
+        engine.addSystem(new RenderSystem(game.batch,cameraManager.getCamera(),game.shapeRenderer));
         engine.addSystem(new AnimationSystem());
-        engine.addSystem(new CameraSystem());
         fixed.addSystem(new PhysicsSystem());
         fixed.addSystem(new CollisionSystem());
         fixed.addSystem(new PlayerSystem());
         engine.addSystem(new MoverSystem());
+        engine.addSystem(new DamageSystem());
+        fixed.addSystem(new ProjectileSystem(cameraManager));
         //engine.addSystem(new LightSystem(game.batch));
 
         engine.addSystem(fixed);
@@ -43,7 +43,7 @@ public class GameScreen implements com.badlogic.gdx.Screen {
     private void update(float delta){
         delta = Math.min(0.25f,delta);
         engine.update(delta);
-
+        cameraManager.update();
     }
 
     @Override
