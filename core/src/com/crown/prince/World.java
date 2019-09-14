@@ -159,6 +159,7 @@ public class World {
         CollideComponent collide = engine.createComponent(CollideComponent.class);
         ScaleComponent scale = engine.createComponent(ScaleComponent.class);
         LightComponent light = engine.createComponent(LightComponent.class);
+        HealthComponent health = engine.createComponent(HealthComponent.class);
 
         //scale değerlerini gir ve player systeminde işlemleri yap
 
@@ -199,6 +200,7 @@ public class World {
         entity.add(collide);
         entity.add(scale);
         entity.add(light);
+        entity.add(health);
 
         engine.addEntity(entity);
 

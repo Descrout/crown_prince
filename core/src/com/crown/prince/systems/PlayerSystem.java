@@ -22,6 +22,7 @@ public class PlayerSystem extends EntitySystem {
     ScaleComponent scale;
     LightComponent light;
     PositionComponent pos;
+    HealthComponent health;
 
     CollisionSystem collisionSystem;
 
@@ -87,6 +88,21 @@ public class PlayerSystem extends EntitySystem {
         }
 
 
+    }
+
+    private void rollState(){
+        anim.state = PlayerComponent.CROUCH;
+        playerComponent.timer++;
+
+        health.canDamaged = (playerComponent.timer>=4 && playerComponent.timer<=14);
+        physics.accX = (playerComponent.facingRight ? 100 :-100);
+        physics.controlled = true;
+
+        if(playerComponent.timer>=18){
+            bounds.h = Constants.playerBoundH;
+            brain.currentState = this::normalState;
+            return;
+        }
     }
 
     private void crouchState() {
@@ -325,6 +341,13 @@ public class PlayerSystem extends EntitySystem {
             return;
         }
 
+        if(playerComponent.keyRoll && playerComponent.canJump){
+            brain.currentState = this::rollState;
+            bounds.h = Constants.playerCrouchH;
+            playerComponent.timer = 0f;
+            return;
+        }
+
         if (!playerComponent.keyUp && physics.velY > 0) physics.velY *= 0.8;
 
         if (playerComponent.keyDown && playerComponent.canJump) {
@@ -436,5 +459,6 @@ public class PlayerSystem extends EntitySystem {
         light = Mappers.light.get(player);
         bounds = Mappers.bounds.get(player);
         pos = Mappers.position.get(player);
+        health = Mappers.health.get(player);
     }
 }
